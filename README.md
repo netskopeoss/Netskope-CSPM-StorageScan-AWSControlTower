@@ -38,26 +38,13 @@ article:
 
 3.  # Existing Netskope Security Cloud tenant that you'll be using to secure your AWS Control Tower landing zone environment. 
 
-# Components and considerations. 
+## Components and considerations. 
 
-# The solution source code can be found on [GitHub](git%20clone%20https:/github.com/dyuriaws/Netskope-TGW-management.git).
+# The solution source code can be found on [GitHub](git%20clone%20https:/github.com/dyuriaws/Netskope-TGW-management.git). This GitHub repository contains two AWS CloudFormation templates and the manifest file. The first template, Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be deployed in the same AWS account and Region where your Control Tower landing zone and the [Customizations for AWS Control Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html) solution are deployed. You need to deploy the solution only on that account and only in that AWS Region. During the AWS account enrolment Netskope orchestration will provision appropriate cross-account AWS IAM roles in all the regions you opted in for. 
 
-> This GitHub repository contains two AWS CloudFormation templates and
-> the manifest file.
->
-> The first template,
-> Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be
-> deployed in the same AWS account and Region where your Control Tower
-> landing zone and the [Customizations for AWS Control
-> Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html)
-> solution are deployed. You need to deploy the solution only on that
-> account and only in that AWS Region. During the AWS account enrolment
-> Netskope orchestration will provision appropriate cross-account AWS
-> IAM roles in all the regions you opted in for.
->
-> The CloudFormation stack deployed using this template on the Control
-> Tower landing zone account creates the following resources on that
-> account:
+The CloudFormation stack deployed using this template on the Control
+Tower landing zone account creates the following resources on that
+account:
 
 a.  AWS Secrets Manager secret encrypted by AWS Key Manager Service key
     to store your Netskope API access token.
@@ -78,10 +65,10 @@ c.  AWS NetskopeAutoAddInstanceLambda Lambda function invoked by the
     APIs to create or update the AWS account enrolment in your Netskope
     tenant.
 
-> Note: You must deploy this template on your landing zone management
-> account prior to proceeding with the Customizations for AWS Control
-> Tower using the second AWS CloudFormation template and the
-> customization manifest file.
+Note: You must deploy this template on your landing zone management
+account prior to proceeding with the Customizations for AWS Control
+Tower using the second AWS CloudFormation template and the customization
+manifest file.
 
 You will use the manifest.yaml file for Customizations for AWS Control
 Tower solution to deploy the cross-account IAM role will be used by
@@ -120,14 +107,14 @@ account in the Netskope tenant.
 
 # 
 
-# Deployment steps:
+## Deployment steps:
 
 1.  # Deploy the AWS CloudFormation stack in your AWS Control Tower Landing Zone management account using the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml template. 
 
     1.  # Clone this GitHub repository to your machine:
 
-> git clone 
-> [https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git](https://github.com/dyuriaws/Netskope-TGW-management.git)
+git clone 
+[https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git](https://github.com/dyuriaws/Netskope-TGW-management.git)
 
 2.  # Sign into the AWS CloudFormation management console and change the region to the one your AWS Control Tower landing zone and the Customizations for AWS Control Tower solution are deployed. 
 
@@ -153,46 +140,46 @@ height="2.660416666666667in"}
 
 6.  Enter the stack name and the parameters for your deployment:
 
-+---------------------+------------------------------------------------+
-| Netskope tenant     | Enter Netskope tenant FQDN (f.e.               |
-| FQDN                | example.goskope.com)                           |
-+=====================+================================================+
-| Netskope tenant     | Enter Netskope tenant REST API token provided  |
-| REST API token      | by Netskope                                    |
-+---------------------+------------------------------------------------+
-| Netskope AWS        | Enter Netskope trusted AWS Account ID provided |
-| Account ID          | by Netskope                                    |
-+---------------------+------------------------------------------------+
-| STS external ID     | Enter STS external ID provided by Netskope     |
-+---------------------+------------------------------------------------+
-| AWS PrincipalOrgID  | Enter your AWS Organizations ID (f.e.          |
-|                     | o-12345678)                                    |
-|                     |                                                |
-|                     | The solution will use the AWS Organizations ID |
-|                     | to retrieve the AWS Account Name to provision  |
-|                     | it in the Netskope tenant                      |
-+---------------------+------------------------------------------------+
-| Security            | Enter your Security Administrator email        |
-| Administrator email | address                                        |
-| address             |                                                |
-+---------------------+------------------------------------------------+
-| AWS KMS Key ID      | Optional KMS Key ID to encrypt Netskope API    |
-|                     | token in Secrets Manager. If not specified     |
-|                     | aws/secretsmanager will be used                |
-+---------------------+------------------------------------------------+
-| Security Scan       | Enter ( \"true\", \"false\" ), whether         |
-| enabled             | Netskope CSPM Security violations Scan is      |
-|                     | enabled                                        |
-+---------------------+------------------------------------------------+
-| CSPM security scan  | Choose the CSPM security and compliance        |
-| interval            | violations scan interval in minutes            |
-+---------------------+------------------------------------------------+
-| DLP Scan enabled    | Enter ( \"true\", \"false\" ), whether         |
-|                     | Netskope storage DLP Scan is enabled           |
-+---------------------+------------------------------------------------+
-| MalwareScan Scan    | Enter ( \"true\", \"false\" ), whether         |
-| enabled             | Netskope storage Malware Scan is enabled       |
-+---------------------+------------------------------------------------+
++-----------------------+----------------------------------------------+
+| Netskope tenant FQDN  | Enter Netskope tenant FQDN (f.e.             |
+|                       | example.goskope.com)                         |
++=======================+==============================================+
+| Netskope tenant REST  | Enter Netskope tenant REST API token         |
+| API token             | provided by Netskope                         |
++-----------------------+----------------------------------------------+
+| Netskope AWS Account  | Enter Netskope trusted AWS Account ID        |
+| ID                    | provided by Netskope                         |
++-----------------------+----------------------------------------------+
+| STS external ID       | Enter STS external ID provided by Netskope   |
++-----------------------+----------------------------------------------+
+| AWS PrincipalOrgID    | Enter your AWS Organizations ID (f.e.        |
+|                       | o-12345678)                                  |
+|                       |                                              |
+|                       | The solution will use the AWS Organizations  |
+|                       | ID to retrieve the AWS Account Name to       |
+|                       | provision it in the Netskope tenant          |
++-----------------------+----------------------------------------------+
+| Security              | Enter your Security Administrator email      |
+| Administrator email   | address                                      |
+| address               |                                              |
++-----------------------+----------------------------------------------+
+| AWS KMS Key ID        | Optional KMS Key ID to encrypt Netskope API  |
+|                       | token in Secrets Manager. If not specified   |
+|                       | aws/secretsmanager will be used              |
++-----------------------+----------------------------------------------+
+| Security Scan enabled | Enter ( \"true\", \"false\" ), whether       |
+|                       | Netskope CSPM Security violations Scan is    |
+|                       | enabled                                      |
++-----------------------+----------------------------------------------+
+| CSPM security scan    | Choose the CSPM security and compliance      |
+| interval              | violations scan interval in minutes          |
++-----------------------+----------------------------------------------+
+| DLP Scan enabled      | Enter ( \"true\", \"false\" ), whether       |
+|                       | Netskope storage DLP Scan is enabled         |
++-----------------------+----------------------------------------------+
+| MalwareScan Scan      | Enter ( \"true\", \"false\" ), whether       |
+| enabled               | Netskope storage Malware Scan is enabled     |
++-----------------------+----------------------------------------------+
 
 ![Graphical user interface, application Description automatically
 generated](media/image4.png){width="5.634235564304462in"
@@ -318,7 +305,7 @@ git clone (HTTPS (GRC) URL copied above)
 
 cd control-tower-configuration
 
-cp \<new manifest.yaml file> .
+cp \<new manifest.yaml file>
 
 # 
 
@@ -342,4 +329,22 @@ git push
 
 # You've just seen how you can automatically enroll your existing AWS accounts, managed by the AWS Control Tower, as well as new AWS account provisioned with AWS Control Tower account factory into the Netskope Cloud Security Posture Management and Storage DLP and malware scan. 
 
+# 
 
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
+
+# 
