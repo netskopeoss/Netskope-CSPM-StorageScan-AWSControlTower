@@ -108,7 +108,7 @@ To learn more about the Customizations for AWS Control Tower you also can take a
 
 ## Deployment steps:
 
-1.  # Deploy the AWS CloudFormation stack in your AWS Control Tower Landing Zone management account using the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml template. 
+1.  Deploy the AWS CloudFormation stack in your AWS Control Tower Landing Zone management account using the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml template. 
 
 1.  Clone this GitHub repository to your machine:
 
@@ -129,22 +129,20 @@ height="1.2381944444444444in"}
 automatically generated](media/image2.png){width="6.5in"
 height="2.660416666666667in"}
 
-5.  Choose the
-    Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from
+5.  Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from
     the disk, click Open and then click Next.
 
-> ![Graphical user interface, text, application, email Description
-> automatically generated](media/image3.png){width="5.968253499562555in"
-> height="3.1824311023622047in"}
+![Graphical user interface, text, application, email Description automatically generated](media/image3.png){width="5.968253499562555in"
+ height="3.1824311023622047in"}
 
 6.  Enter the stack name and the parameters for your deployment:
 
 +-----------------------+----------------------------------------------+
-| Netskope tenant FQDN  | Enter Netskope tenant FQDN (f.e.             |
-|                       | example.goskope.com)                         |
+| Netskope tenant FQDN  | Enter Netskope tenant FQDN                   |
+|                       | (f.e.example.goskope.com)                    |
 +=======================+==============================================+
-| Netskope tenant REST  | Enter Netskope tenant REST API token         |
-| API token             | provided by Netskope                         |
+| Netskope tenant REST  | Enter Netskope tenant                        |
+| API token             | REST API token provided by Netskope          |
 +-----------------------+----------------------------------------------+
 | Netskope AWS Account  | Enter Netskope trusted AWS Account ID        |
 | ID                    | provided by Netskope                         |
