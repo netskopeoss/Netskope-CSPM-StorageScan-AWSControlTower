@@ -119,8 +119,7 @@ git clone 
 
 3.  Click Create Stack and choose With new resources (standard).
 
-![Graphical user interface, application, Teams Description automatically
-generated](media/Picture1.png) {: width="6.5in" height="1.2381944444444444in"}
+![Graphical user interface, application, Teams Description automatically generated](media/Picture1.png){: width="6.5in" height="1.2381944444444444in"}
 
 4.  Choose Upload a template file and click on Choose file.
 
