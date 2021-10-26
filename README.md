@@ -120,19 +120,19 @@ git clone 
 3.  Click Create Stack and choose With new resources (standard).
 
 ![Graphical user interface, application, Teams Description automatically
-generated](media/picture1.png){width="6.5in"
+generated](media/Picture1.png){width="6.5in"
 height="1.2381944444444444in"}
 
 4.  Choose Upload a template file and click on Choose file.
 
 ![Graphical user interface, text, application, email Description
-automatically generated](media/picture2.png){width="6.5in"
+automatically generated](media/Picture2.png){width="6.5in"
 height="2.660416666666667in"}
 
 5.  Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from
     the disk, click Open and then click Next.
 
-![Graphical user interface, text, application, email Description automatically generated](media/picture3.png){width="5.968253499562555in"
+![Graphical user interface, text, application, email Description automatically generated](media/Picture3.png){width="5.968253499562555in"
  height="3.1824311023622047in"}
 
 6.  Enter the stack name and the parameters for your deployment:
@@ -179,7 +179,7 @@ height="2.660416666666667in"}
 +-----------------------+----------------------------------------------+
 
 ![Graphical user interface, application Description automatically
-generated](media/picture4.png){width="5.634235564304462in"
+generated](media/Picture4.png){width="5.634235564304462in"
 height="6.503449256342957in"}
 
 7.  Click Next.
@@ -188,13 +188,13 @@ height="6.503449256342957in"}
     click Next.
 
  ![Graphical user interface, application Description automatically
- generated](media/picture5.png){width="5.491870078740157in"
+ generated](media/Picture5.png){width="5.491870078740157in"
  height="4.133570647419073in"}
 
 9.  Acknowledge creating IAM resources and click Create stack.
 
  ![Graphical user interface, text, application Description
- automatically generated](media/picture6.png){width="5.313136482939632in"
+ automatically generated](media/Picture6.png){width="5.313136482939632in"
  height="3.058459098862642in"}
 
 10. When CloudFormation stack is in the CREATE_COMPLETE state, you can
@@ -202,7 +202,7 @@ height="6.503449256342957in"}
     stack.
 
 ![Graphical user interface, text, application, email Description
- automatically generated](media/picture7.png){width="5.986206255468066in"
+ automatically generated](media/Picture7.png){width="5.986206255468066in"
  height="2.2224431321084865in"}
 
 11. Later, after you deploy the AWS IAM cross-account roles used by
@@ -213,7 +213,7 @@ height="6.503449256342957in"}
     function.
 
 ![Graphical user interface, text, application, email Description
-automatically generated](media/picture8.png){width="6.5in"
+automatically generated](media/Picture8.png){width="6.5in"
 height="2.084722222222222in"}
 
 2.  # Deploy the AWS IAM cross-account roles using the Customizations for AWS Control Tower.
@@ -231,10 +231,10 @@ To find the TrustedAccountID and the ExternalID please follow the steps below:
 2.   In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
 
  ![Graphical user interface, text, application, email Description
- automatically generated](media/picture9.png){width="4.362069116360455in"
+ automatically generated](media/Picture9.png){width="4.362069116360455in"
  height="3.0534481627296586in"}
 
- Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/picture10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
+ Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/Picture10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
 
 # 
 
@@ -277,7 +277,7 @@ similar to the steps using AWS CodeCommit below.
 
  Sign into the AWS CodeCommit management console, choose the custom-control-tower-configuration repository and copy its HTTPS (GRC) URL:
 
- ![A screenshot of a computer Description automatically generated](media/picture11.png){width="5.879311023622047in" height="1.180259186351706in"}
+ ![A screenshot of a computer Description automatically generated](media/Picture11.png){width="5.879311023622047in" height="1.180259186351706in"}
 
  If not yet installed, install the git-remote-codecommit package in your local machine:
 
