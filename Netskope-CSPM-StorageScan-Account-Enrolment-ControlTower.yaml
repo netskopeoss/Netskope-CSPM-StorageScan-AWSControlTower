@@ -1,0 +1,442 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Netskope CSPM Account Enrolment Template for AWS Control Tower. This template creates CloudWath event triggered by CreateManagedAccount 
+  and UpdateManagedAccount CT lifecycle events, which triggers the Lambda function calling Netskope Create an AWS Instance API to enroll the newly created account in Netskope CSPM"
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Netskope tenant info"
+        Parameters: 
+          - TenantUrl
+          - NetskopeAPIToken
+          - TrustedAccountID
+          - ExternalID
+      - 
+        Label: 
+          default: "AWS Organization info"
+        Parameters: 
+          - AWSOrgID
+          - AdminEmailAddress
+          - KmsKeyId
+      - 
+        Label: 
+          default: "Netskope functionality enabled"
+        Parameters: 
+          - SecurityScan
+          - SecurityScanInterval
+          - DLPScan
+          - MalwareScan
+
+    ParameterLabels: 
+      TenantUrl: 
+        default: "Netskope tenant FQDN"
+      NetskopeAPIToken: 
+        default: "Netskope tenant REST API token"
+      TrustedAccountID: 
+        default: "Netskope AWS Account ID"
+      ExternalID: 
+        default: "STS external ID"
+      AWSOrgID: 
+        default: "AWS PrincipalOrgID"
+      AdminEmailAddress: 
+        default: "Security Administrator email address"
+      SecurityScan: 
+        default: 'Security Scan enabled'
+      SecurityScanInterval:
+        default: 'CSPM security scan interval'
+      DLPScan: 
+        default: 'DLP Scan enabled'
+      MalwareScan: 
+        default: 'MalwareScan Scan enabled'
+      KmsKeyId:
+        default: 'AWS KMS Key ID'
+
+
+
+Parameters:
+  NetskopeAPIToken:
+    Type: String
+    NoEcho: true
+    Description: 'Enter Netskope tenant REST API token provided by Netskope'
+  KmsKeyId:
+    Type: String
+    Description: 'Optional KMS Key ID to encrypt Netskope API token in Secrets Manager. If not specified aws/secretsmanager will be used'
+    Default: ""
+  TenantUrl:
+    Type: String
+    Description: 'Enter Netskope tenant FQDN (f.e. example.goskope.com)'
+  SecurityScan:
+    Type: String
+    Default: 'true'
+    Description: 'Enter ( "true", "false" ), whether Security violations Scan is enabled'
+    AllowedValues:
+      - true
+      - false
+  DLPScan:
+    Type: String
+    Default: 'true'
+    Description: 'Enter ( "true", "false" ), whether DLP Scan is enabled'
+    AllowedValues:
+      - true
+      - false
+  MalwareScan:
+    Type: String
+    Default: 'true'
+    Description: 'Enter ( "true", "false" ), whether Malware Scan is enabled'
+    AllowedValues:
+      - true
+      - false
+  SecurityScanInterval:
+    Type: String
+    Default: '60'
+    Description: 'Choose the CSPM security and compliance violations scan interval in minutes'
+    AllowedValues:
+      - '30'
+      - '60'
+      - '120'
+      - '360'
+      - '1440'
+  TrustedAccountID:
+    Type: String
+    Description: 'Enter Netskope trusted AWS Account ID provided by Netskope'
+  ExternalID:
+    Type: String
+    Description: 'Enter STS external ID provided by Netskope'
+  AdminEmailAddress:
+    Type: String
+    Description: 'Enter your Security Administrator email address'
+  AWSOrgID:
+    Type: String
+    Description: 'Enter your AWS Organizations ID (f.e. o-12345678)'
+
+Conditions:
+  StorageScanEnabled: !Or
+    - !Equals 
+      - 'true'
+      - Ref: DLPScan
+    - !Equals
+      - 'true'
+      - Ref: MalwareScan
+  SecurityScanEnabled: !Equals 
+    - 'true'
+    - Ref: SecurityScan
+  AnyFeatureEnabled: !Or 
+    - !Equals 
+      - 'true'
+      - !Ref DLPScan
+    - !Equals 
+      - 'true'
+      - !Ref SecurityScan
+    - !Equals 
+      - 'true'
+      - !Ref MalwareScan
+  KMSKeyIDProvided: !Equals 
+    - 'true'
+    - Ref: KmsKeyId
+
+Outputs:
+  NetskopeAddInstanceLambda:
+    Description: Netskope Enroll Account Lambda Function .
+    Value: !GetAtt 
+      - NetskopeAddInstanceLambda
+      - Arn
+
+Resources:
+  APISecret:
+    Condition: AnyFeatureEnabled
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Netskope API secret token
+      SecretString: !Sub '{"token":"${NetskopeAPIToken}"}'
+      KmsKeyId: 
+        Fn::If:
+        - KMSKeyIDProvided
+        - Ref: KmsKeyId
+        - Ref: AWS::NoValue
+      Tags:
+        -
+          Key: Name
+          Value: NetskopeAPIToken
+    
+  NetskopeAddInstanceLambda:
+    Condition: AnyFeatureEnabled
+    Type: 'AWS::Lambda::Function'
+    Description: Funciton to automatically enroll AWS account in the Netskope CSPM, storage DLP and malware scan
+    Properties:
+      FunctionName: NetskopeAutoAddInstanceLambda
+      Handler: index.handler
+      Role: !GetAtt 
+        - NetskopeLambdaAccessRole
+        - Arn
+      Runtime: python3.7
+      Timeout: 240
+      Environment:
+        Variables:
+          AWS_PARTITION: aws
+          apitoken_arn: !Ref APISecret
+          securityscan: !Ref SecurityScan
+          introspection: !Ref DLPScan
+          malware: !Ref MalwareScan
+          securityscaninterval: !Ref SecurityScanInterval
+          tenanturl: !Ref TenantUrl
+          adminemail: !Ref AdminEmailAddress
+      Code:
+        ZipFile: |
+          import boto3
+          import json
+          import time
+          import ssl
+          import os
+          from urllib.request import Request, urlopen
+          import logging
+          import urllib
+
+          logger = logging.getLogger()
+          logger.setLevel(logging.INFO)
+
+          def handler(event, context):
+              logger.debug("Received event: " + json.dumps(event, indent=2))
+              logger.debug(event)
+              event_input = event["detail"]["input"]
+              logger.debug('Event Input: '+event_input)
+              input_json = json.loads(event_input)
+              StackSetName = input_json['ResourceProperties']['StackSetName']
+              
+              if StackSetName != 'CustomControlTower-provision-Netskope-role':
+                  logger.debug("Received non-Netskope event. Exiting... ")
+                  return 0
+                  
+              AccountList = input_json['ResourceProperties']['AccountList']
+              
+              secret_arn = os.getenv('apitoken_arn')
+              tenant_url = os.getenv('tenanturl')
+              admin_email =  os.getenv('adminemail')
+              securityscaninterval = os.getenv('securityscaninterval')
+              services = []
+              if os.getenv('introspection') == "true":
+                services.append("introspection")
+              if os.getenv('securityscan') == "true":
+                services.append("securityscan")
+              if os.getenv('malware') == "true":
+                services.append("malware")
+              
+              api_token = json.loads(get_secret(secret_arn))['token']
+              
+              org_client = boto3.client('organizations')
+              
+              for account_id in AccountList:
+                  logger.debug("Adding account: "+ account_id)
+                  try: 
+                      instance_name = org_client.describe_account(AccountId=account_id)['Account']['Name']
+                      logger.debug("Account name: "+ instance_name)
+                  except Exception as exc:
+                      logger.error("Response exc : {}".format(str(exc)))
+                      logger.error("Account ID "+account_id+' doesn\'t belong to the AWS Organization. Skipping....')
+                      continue
+                  
+                  #Check if account already enrolled in Netskope tenant
+                  
+                  request_url = "https://{}/api/v1/introspection_instance?token={}&app=aws&instance_name={}".format(tenant_url, api_token, urllib.parse.quote(instance_name), '{}')
+                  secure_request_url = "https://{}/api/v1/introspection_instance?token={}&app=aws&instance_name={}".format(tenant_url, '******', urllib.parse.quote(instance_name), '{}')
+                  logger.info(secure_request_url)
+                  request_body=''
+                  response = call_api(request_url, request_body)
+                  logger.debug( json.dumps(response, indent=2))
+                  if response['status'] == 'success':
+                      logger.info('Account '+account_id+' account name '+instance_name+' already enrolled. Updating...')
+                      event_name = 'UpdateManagedAccount'
+                  else:
+                      logger.error('Account '+account_id+' account name '+instance_name+' not yet enrolled. Adding...')
+                      event_name = 'CreateManagedAccount'
+                  
+                  request_body = {
+                      "app": "aws",
+                      "instance_name": instance_name,
+                  }
+                  request_url = "https://{}/api/v1/public_cloud/account?token={}&op={}".format(tenant_url, api_token, '{}')
+                  secure_request_url = "https://{}/api/v1/public_cloud/account?token={}&op={}".format(tenant_url, '******', '{}')
+                  logger.info(secure_request_url)
+                  
+                  request_body["use_for"] = services
+                  
+                  if 'securityscan' in services:
+                      request_body["securityscan_interval"] = securityscaninterval
+              
+                  if event_name == 'CreateManagedAccount':
+                      request_url = request_url.format('create')
+                      request_body['accounts'] = [{
+                          'account_id': account_id,
+                          'account_name': instance_name,
+                          'admin_email': admin_email
+                      }]  
+                  if event_name == 'UpdateManagedAccount':
+                      request_url = request_url.format('update')
+                      request_body["admin_email"] = admin_email
+                        
+                  request_body = json.dumps(request_body)
+                  logger.debug(request_body)
+                  
+                  response = call_api(request_url, request_body)
+                  if response["status"] == "success":
+                      logger.info('Successfully enrolled account '+account_id+' account name '+instance_name+' Exiting...')
+                      return 1
+                  else:
+                      logger.error('Failed to enroll account '+account_id+' account name '+instance_name+' Exiting...')
+                      return 0
+                      
+          def call_api(request_url, request_body):        
+                  count = 3
+                  json_resp=''
+                  while count:
+                      try:
+                          req = Request(request_url)
+                          if request_body:
+                              req.add_header('Content-Type', 'application/json; charset=utf-8')
+                              jsondataasbyte = request_body.encode("utf-8")
+                              req.add_header('Content-Length', len(jsondataasbyte))
+                              logger.debug(jsondataasbyte)
+                              response = urlopen(req, jsondataasbyte, context=ssl._create_unverified_context(), timeout=30)
+                          else:
+                              response = urlopen(req, context=ssl._create_unverified_context(), timeout=30)
+                          resp = {"data": response.read().decode("utf-8")}
+                          logger.info("RESPONSE: {}".format(resp))
+                          if "status" in resp["data"]:
+                             json_resp  = json.loads(resp["data"])
+                             logger.debug(json.dumps(json_resp))
+                             status = json_resp.get("status")
+                             logger.debug('Status: '+status)
+                             if status != "success":
+                                logger.info(json.dumps(json_resp))
+                                logger.info('Error returned by the API ')
+                                break
+                          #logger.info("wait for 1 min")
+                          #time.sleep(60)
+                          break
+                      except Exception as exc:
+                          print("Response exc : {}".format(str(exc)))
+                          if count > 0:
+                             count -= 1
+                          if count == 0:
+                              logger.error('Failed to call API')
+                  return(json_resp)
+              
+          def get_secret(secret_arn):
+              
+              logger.debug(secret_arn)
+              session = boto3.session.Session()
+              client = session.client(
+                  service_name='secretsmanager'
+              )
+
+              # In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
+              # See https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+              # We rethrow the exception by default.
+
+              try:
+                  response = client.describe_secret(SecretId=secret_arn)
+                  
+                  get_secret_value_response = client.get_secret_value(
+                      SecretId=response['Name']
+                  )
+              except botocore.exceptions.ClientError as e:
+                  if e.response['Error']['Code'] == 'DecryptionFailureException':
+                      # Secrets Manager can't decrypt the protected secret text using the provided KMS key.
+                      # Deal with the exception here, and/or rethrow at your discretion.
+                      raise e
+                  elif e.response['Error']['Code'] == 'InternalServiceErrorException':
+                      # An error occurred on the server side.
+                      # Deal with the exception here, and/or rethrow at your discretion.
+                      raise e
+                  elif e.response['Error']['Code'] == 'InvalidParameterException':
+                      # You provided an invalid value for a parameter.
+                      # Deal with the exception here, and/or rethrow at your discretion.
+                      raise e
+                  elif e.response['Error']['Code'] == 'InvalidRequestException':
+                      # You provided a parameter value that is not valid for the current state of the resource.
+                      # Deal with the exception here, and/or rethrow at your discretion.
+                      raise e
+                  elif e.response['Error']['Code'] == 'ResourceNotFoundException':
+                      # We can't find the resource that you asked for.
+                      # Deal with the exception here, and/or rethrow at your discretion.
+                      raise e
+                  else:
+                      print(e)
+              else:
+                  # Decrypts secret using the associated KMS CMK.
+                  # Depending on whether the secret is a string or binary, one of these fields will be populated.
+                  secret = get_secret_value_response['SecretString']
+              return(secret)
+
+
+
+  NetskopeLambdaAccessRole:
+    Condition: AnyFeatureEnabled
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: NetskopeLambdaAccessRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Path: /
+      Policies:
+        - PolicyName: LogAndASMAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - 'logs:*'
+                Effect: Allow
+                Resource:
+                  - 'arn:aws:logs:*:*:*'
+              - Action:
+                  - 'secretsmanager:GetSecretValue'
+                  - 'secretsmanager:DescribeSecret'
+                  - 'organizations:DescribeAccount'
+                Effect: Allow
+                Resource: 
+                  - !Ref APISecret
+                  - !Sub "arn:aws:organizations::*:account/${AWSOrgID}/*"
+
+  EventNetskopeEnrollAccount4CT: 
+    Type: AWS::Events::Rule
+    DependsOn: NetskopeAddInstanceLambda
+    Condition: AnyFeatureEnabled
+    Properties: 
+      Name: NetskopeEnrollAccount
+      Description: "Event to enroll new account in Netskope CSPM and DLP scan following CT lifecycle events"
+      EventPattern: 
+        source: 
+          - "aws.states"
+        detail-type: 
+          - "Step Functions Execution Status Change"
+        detail: 
+          status: 
+            - "SUCCEEDED"
+          inputDetails:
+              included: 
+                - true
+      State: "ENABLED"
+      Targets: 
+        - 
+          Arn: 
+            Fn::GetAtt: 
+              - "NetskopeAddInstanceLambda"
+              - "Arn"
+          Id: "NetskopeAddInstanceLambda"
+
+  PermissionToInvokeNetskopeAddInstanceLambda:
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: 
+        Ref: "NetskopeAddInstanceLambda"
+      Action: "lambda:InvokeFunction"
+      Principal: events.amazonaws.com
+      SourceArn: !Sub 'arn:aws:events:${AWS::Region}:${AWS::AccountId}:rule/NetskopeEnrollAccount'

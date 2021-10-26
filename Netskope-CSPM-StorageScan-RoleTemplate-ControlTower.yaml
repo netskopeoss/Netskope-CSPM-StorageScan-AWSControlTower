@@ -1,0 +1,180 @@
+Description: Netskope cross-account Role provisioning for use with AWS CT customizations
+Parameters:
+  SecurityScan:
+    Type: String
+    Default: 'true'
+    Description: 'Enter ( "true", "false" ), whether security scan is enabled.'
+    AllowedValues:
+      - true
+      - false
+  DLPScan:
+    Type: String
+    Default: 'true'
+    Description: 'Enter ( "true", "false" ), whether DLP Scan is enabled.'
+    AllowedValues:
+      - true
+      - false
+  MalwareScan:
+    Type: String
+    Default: 'false'
+    Description: 'Enter ( "true", "false" ), whether Malware Scan is enabled'
+    AllowedValues:
+      - true
+      - false
+  SecurityScanInterval:
+    Type: String
+    Default: '60'
+    Description: Select security scan interval
+    AllowedValues:
+      - '30'
+      - '60'
+      - '120'
+      - '360'
+      - '1440'
+  TrustedAccountID:
+    Type: String
+    Description: Enter Netskope AWS account ID provided by Netskope.
+  ExternalID:
+    Type: String
+    Description: Enter STS external ID provided by Netskope.
+Conditions:
+  StorageScanEnabled: !Or
+    - !Equals 
+      - 'true'
+      - Ref: DLPScan
+    - !Equals
+      - 'true'
+      - Ref: MalwareScan
+  SecurityScanEnabled: !Equals 
+    - 'true'
+    - Ref: SecurityScan
+  AnyFeatureEnabled: !Or 
+    - !Equals 
+      - 'true'
+      - !Ref DLPScan
+    - !Equals 
+      - 'true'
+      - !Ref SecurityScan
+Outputs:
+  CrossRoleAccountRoleARN:
+    Description: The cross-account role that Netskope will use.
+    Value: !GetAtt 
+      - CrossAccountRole
+      - Arn
+Resources:
+  CloudFormationPolicy:
+    Condition: StorageScanEnabled
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 'cloudformation:CreateStack'
+              - 'cloudformation:UpdateStack'
+              - 'cloudformation:DeleteStack'
+            Condition:
+              'ForAllValues:Null':
+                'cloudformation:RoleArn': true
+            Effect: Allow
+            Resource:
+              - '*'
+          - Action:
+              - 'cloudformation:DescribeStacks'
+              - 'sns:Publish'
+              - 'sns:Subscribe'
+              - 'sns:SetTopicAttributes'
+              - 'sns:CreateTopic'
+              - 'sns:DeleteTopic'
+              - 'sns:ListTopics'
+              - 'sns:GetTopicAttributes'
+              - 'events:DescribeRule'
+              - 'events:ListRules'
+              - 'events:PutEvents'
+              - 'events:EnableRule'
+              - 'events:PutRule'
+              - 'events:PutTargets'
+              - 'events:RemoveTargets'
+              - 'events:DeleteRule'
+            Effect: Allow
+            Resource:
+              - 'arn:aws:cloudformation:*:*:stack/NetskopeStack/*'
+              - 'arn:aws:sns:*:*:*'
+              - 'arn:aws:events:*:*:rule/NetskopeStack*'
+        Version: 2012-10-17
+      PolicyName: CloudFormationPolicy
+      Roles:
+        - !Ref CrossAccountRole
+    Type: 'AWS::IAM::Policy'
+  CrossAccountRole:
+    Condition: AnyFeatureEnabled
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'sts:ExternalId': !Ref ExternalID
+            Effect: Allow
+            Principal:
+              AWS: !Join 
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref TrustedAccountID
+                  - ':root'
+            Sid: ''
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/SecurityAudit'
+      Path: /
+      RoleName: Netskope_Role
+    Type: 'AWS::IAM::Role'
+  SecurityScanRolePolicy:
+    Condition: SecurityScanEnabled
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:ListBucket'
+              - 'ses:ListIdentityPolicies'
+              - 's3:GetBucketAcl'
+              - 's3:GetBucketLocation'
+              - 's3:ListAllMyBuckets'
+              - 'dynamodb:ListTagsOfResource'
+              - 'sqs:ListDeadLetterSourceQueues'
+              - 'sqs:GetQueueUrl'
+              - 'sqs:GetQueueAttributes'
+              - 'lambda:Get*'
+              - 'lambda:List*'
+            Effect: Allow
+            Resource:
+              - '*'
+        Version: 2012-10-17
+      PolicyName: netskope-csa
+      Roles:
+        - !Ref CrossAccountRole
+    Type: 'AWS::IAM::Policy'
+  StorageScanPolicy:
+    Condition: StorageScanEnabled
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 'sns:Subscribe'
+              - 'sns:Unsubscribe'
+              - 'sns:ConfirmSubscription'
+              - 's3:ListAllMyBuckets'
+              - 's3:ListBucket'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:GetBucketLocation'
+              - 'cloudtrail:DescribeTrails'
+              - 'ec2:DescribeRegions'
+              - 'iam:ListAccountAliases'
+            Effect: Allow
+            Resource:
+              - '*'
+        Version: 2012-10-17
+      PolicyName: StorageScanPolicy
+      Roles:
+        - !Ref CrossAccountRole
+    Type: 'AWS::IAM::Policy'

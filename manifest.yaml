@@ -1,0 +1,34 @@
+---
+# Home region for CodePipeline, StepFunctions, Lambda, SSM, StackSets
+region: us-east-2  # Control Tower Home Region
+version: 2021-03-15
+
+
+resources:
+  # ControlTower Custom SCPs - Additional Preventive Guardrails
+  - name: provision-Netskope-role 
+    description: Provision cross-account IAM role for Netskope CSPM and storage scan access
+    resource_file: s3://netskope-oss-source-bucket-us-east-2/AWS-CT/NetskopeCSPMRoleTemplateCT.yaml
+    parameters:
+      - parameter_key: SecurityScan
+        parameter_value: true
+      - parameter_key: DLPScan
+        parameter_value: true
+      - parameter_key: MalwareScan
+        parameter_value: true
+      - parameter_key: TrustedAccountID
+        parameter_value: '123456789012'
+      - parameter_key: ExternalID
+        parameter_value: '01234567890abcdef01234567890abcdef0123456'
+    deploy_method: stack_set
+    # Apply to the following OU(s)
+    deployment_targets:
+      organizational_units:
+        # New Essential OU names since ControlTower v2.7 April 16.
+        # Observe the names of your existing OUs and comment out or uncomment below to match yours.
+        #- Security # Foremerly Core
+        - Sandbox
+        #- Core
+        #- Custom
+    regions:
+      - us-east-2
