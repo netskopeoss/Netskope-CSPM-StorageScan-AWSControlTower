@@ -112,14 +112,13 @@ To learn more about the Customizations for AWS Control Tower you also can take a
 
 1.  Clone this GitHub repository to your machine:
 
-git clone 
-[https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git](https://github.com/dyuriaws/Netskope-TGW-management.git)
+git clone https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git
 
 2.  Sign into the AWS CloudFormation management console and change the region to the one your AWS Control Tower landing zone and the Customizations for AWS Control Tower solution are deployed. 
 
 3.  Click Create Stack and choose With new resources (standard).
 
-![Graphical user interface, application, Teams Description automatically generated](media/Picture1.png){width="250";}
+![Graphical user interface, application, Teams Description automatically generated](media/Picture1.png | 640x480){width="250";}
 
 4.  Choose Upload a template file and click on Choose file.
 
