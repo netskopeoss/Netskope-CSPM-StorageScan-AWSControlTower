@@ -25,7 +25,7 @@ Scan services, as well assure that new accounts provisioned by the AWS
 Control Tower account factory will be also immediately protected by the
 Netskope Security Cloud services.
 
-Prerequisites.
+## Prerequisites.
 
 The following are the prerequisites for the solution described in this
 article:
@@ -34,13 +34,13 @@ article:
     Zone](https://aws.amazon.com/controltower/features/) established
     with AWS Control Tower.
 
-2.  # [Customizations for AWS Control Tower](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/) solution deployed in your landing zone environment. This solution allows you to customize the AWS Control Tower landing zone according to your organization's requirements and to ensure that your AWS resource deployments stay in sync with your landing zone. 
+2.  [Customizations for AWS Control Tower](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/) solution deployed in your landing zone environment. This solution allows you to customize the AWS Control Tower landing zone according to your organization's requirements and to ensure that your AWS resource deployments stay in sync with your landing zone. 
 
-3.  # Existing Netskope Security Cloud tenant that you'll be using to secure your AWS Control Tower landing zone environment. 
+3.  Existing Netskope Security Cloud tenant that you'll be using to secure your AWS Control Tower landing zone environment. 
 
 ## Components and considerations. 
 
-# The solution source code can be found on [GitHub](git%20clone%20https:/github.com/dyuriaws/Netskope-TGW-management.git). This GitHub repository contains two AWS CloudFormation templates and the manifest file. The first template, Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be deployed in the same AWS account and Region where your Control Tower landing zone and the [Customizations for AWS Control Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html) solution are deployed. You need to deploy the solution only on that account and only in that AWS Region. During the AWS account enrolment Netskope orchestration will provision appropriate cross-account AWS IAM roles in all the regions you opted in for. 
+The solution source code can be found on [GitHub](git%20clone%20https:/github.com/dyuriaws/Netskope-TGW-management.git). This GitHub repository contains two AWS CloudFormation templates and the manifest file. The first template, Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be deployed in the same AWS account and Region where your Control Tower landing zone and the [Customizations for AWS Control Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html) solution are deployed. You need to deploy the solution only on that account and only in that AWS Region. During the AWS account enrolment Netskope orchestration will provision appropriate cross-account AWS IAM roles in all the regions you opted in for. 
 
 The CloudFormation stack deployed using this template on the Control
 Tower landing zone account creates the following resources on that
@@ -99,24 +99,23 @@ SUCCEEDED event in the Amazon CloudWatch which triggers the
 NetskopeAutoAddInstanceLambda Lambda function which configures your AWS
 account in the Netskope tenant.
 
-# You can find more information about Customizations for AWS Control Tower [here](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/).
+You can find more information about Customizations for AWS Control Tower [here](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/).
 
-# Please also refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details.
+Please also refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details.
 
-# To learn more about the Customizations for AWS Control Tower you also can take a look at the [Customizations for AWS Control Tower hand-on lab](https://controltower.aws-management.tools/automation/cfct/) in the [Control Tower immersion day](https://controltower.aws-management.tools/immersionday/). 
+To learn more about the Customizations for AWS Control Tower you also can take a look at the [Customizations for AWS Control Tower hand-on lab](https://controltower.aws-management.tools/automation/cfct/) in the [Control Tower immersion day](https://controltower.aws-management.tools/immersionday/). 
 
-# 
 
 ## Deployment steps:
 
 1.  # Deploy the AWS CloudFormation stack in your AWS Control Tower Landing Zone management account using the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml template. 
 
-    1.  # Clone this GitHub repository to your machine:
+1.  Clone this GitHub repository to your machine:
 
 git clone 
 [https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git](https://github.com/dyuriaws/Netskope-TGW-management.git)
 
-2.  # Sign into the AWS CloudFormation management console and change the region to the one your AWS Control Tower landing zone and the Customizations for AWS Control Tower solution are deployed. 
+2.  Sign into the AWS CloudFormation management console and change the region to the one your AWS Control Tower landing zone and the Customizations for AWS Control Tower solution are deployed. 
 
 3.  Click Create Stack and choose With new resources (standard).
 
@@ -219,62 +218,62 @@ height="6.503449256342957in"}
 automatically generated](media/image8.png){width="6.5in"
 height="2.084722222222222in"}
 
-2.  # Deploy the AWS IAM cross-account roles using the Customizations for AWS Control Tower.
+2.  ## Deploy the AWS IAM cross-account roles using the Customizations for AWS Control Tower.
 
-    1.  # Open the manifest.yaml file you cloned from the GitHub repository. 
+    1.  Open the manifest.yaml file you cloned from the GitHub repository. 
 
-    2.  # Replace the us-east-2 AWS Region in the lines 4, 11 and 34 with the AWS Region where your Control Tower landing zone is deployed. 
+    2.  Replace the us-east-2 AWS Region in the lines 4, 11 and 34 with the AWS Region where your Control Tower landing zone is deployed. 
 
-    3.  # Replace the TrustedAccountID and the ExternalID with the corresponding values for you Netskope tenant. 
+    3.  Replace the TrustedAccountID and the ExternalID with the corresponding values for you Netskope tenant. 
 
-# To find the TrustedAccountID and the ExternalID please follow the steps below:
+To find the TrustedAccountID and the ExternalID please follow the steps below:
 
-1.  # Sing into the Netskope tenant management console and navigate to Settings \> API-enabled Protection \> IaaS, then select AWS and click Setup.
+1.   Sign into the Netskope tenant management console and navigate to Settings \> API-enabled Protection \> IaaS, then select AWS and click Setup.
 
-2.  # In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
+2.   In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
 
 > ![Graphical user interface, text, application, email Description
 > automatically generated](media/image9.png){width="4.362069116360455in"
 > height="3.0534481627296586in"}
 
-# Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/image10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
+ Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/image10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
 
 # 
 
-# Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:
+ Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:
 
-# Statement:
+ Statement:
 
-#  - Action:
+  - Action:
 
-#  - sts:AssumeRole
+  - sts:AssumeRole
 
-#  Condition:
+  Condition:
 
-#  StringEquals:
+  StringEquals:
 
-#  sts:ExternalId:01234567890abcdef01234567890abcdef0123456
+  sts:ExternalId:01234567890abcdef01234567890abcdef0123456
 
-#  Effect: Allow
+  Effect: Allow
 
-#  Principal:
+  Principal:
 
-#  AWS:
+  AWS:
 
-#  - arn:aws:iam::123456789012:root
+  - arn:aws:iam::123456789012:root
 
-#  Sid: \'\'
+  Sid: \'\'
 
 The value of sts:ExternalId is your ExternalID and the account ID in the
 AWS account ARN is your TrustedAccountID
 
-4.  # Set the values for the SecurityScan, DLPScan and TrustedAccountID to true or false to configure the Netskope Security Cloud functionality you'd like to use to protect your AWS accounts. 
+4.   Set the values for the SecurityScan, DLPScan and TrustedAccountID to true or false to configure the Netskope Security Cloud functionality you'd like to use to protect your AWS accounts. 
 
-5.  # Configure the AWS Organizations Units and accounts you'd like to enroll in Netskope CSPM and Storage Scan services in the deployment_targets section of the manifest file. Please refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details about working with the manifest file.
+5.   Configure the AWS Organizations Units and accounts you'd like to enroll in Netskope CSPM and Storage Scan services in the deployment_targets section of the manifest file. Please refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details about working with the manifest file.
 
-6.  # Save the manifest file.
+6.   Save the manifest file.
 
-# Now you can trigger the Customizations for AWS Control Tower code pipeline using the newly edited manifest file. 
+ Now you can trigger the Customizations for AWS Control Tower code pipeline using the newly edited manifest file. 
 
 Below we assume you're using AWS
 [CodeCommit](https://aws.amazon.com/codecommit/) as the Customizations
@@ -287,17 +286,17 @@ Steps for deploying the Control Tower customizations for Netskope
 account enrollment using Amazon S3 as a configurations source are
 similar to the steps using AWS CodeCommit below.
 
-# Sign into the AWS CodeCommit management console, choose the custom-control-tower-configuration repository and copy its HTTPS (GRC) URL:
+ Sign into the AWS CodeCommit management console, choose the custom-control-tower-configuration repository and copy its HTTPS (GRC) URL:
 
-# ![A screenshot of a computer Description automatically generated](media/image11.png){width="5.879311023622047in" height="1.180259186351706in"}
+ ![A screenshot of a computer Description automatically generated](media/image11.png){width="5.879311023622047in" height="1.180259186351706in"}
 
-# If not yet installed, install the git-remote-codecommit package in your local machine:
+ If not yet installed, install the git-remote-codecommit package in your local machine:
 
 pip install git-remote-codecommit
 
 # 
 
-# Assuming you already have proper AWS CLI credentials for accessing the control-tower-configuration repository in your Control Tower landing zone management account, clone this repository to your local machine:
+ Assuming you already have proper AWS CLI credentials for accessing the control-tower-configuration repository in your Control Tower landing zone management account, clone this repository to your local machine:
 
 git clone (HTTPS (GRC) URL copied above)
 
