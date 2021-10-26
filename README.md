@@ -121,7 +121,7 @@ git clone https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTo
 ![image](media/Picture1.png =250x){width="6.5in"
 height="2.660416666666667in"}
 
-<img src="media/Picture1.png" width="200" height="200" />
+<img src="media/Picture1.png" width="1000" />
 
 4.  Choose Upload a template file and click on Choose file.
 
