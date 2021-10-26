@@ -118,7 +118,7 @@ git clone https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTo
 
 3.  Click Create Stack and choose With new resources (standard).
 
-![image](media/Picture1.png){width="6.5in"
+![image](media/Picture1.png =250x){width="6.5in"
 height="2.660416666666667in"}
 
 4.  Choose Upload a template file and click on Choose file.
