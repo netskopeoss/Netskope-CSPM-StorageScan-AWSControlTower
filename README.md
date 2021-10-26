@@ -40,7 +40,7 @@ article:
 
 ## Components and considerations. 
 
-The solution source code can be found on [GitHub](git%20clone%20https:/github.com/dyuriaws/Netskope-TGW-management.git). This GitHub repository contains two AWS CloudFormation templates and the manifest file. The first template, Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be deployed in the same AWS account and Region where your Control Tower landing zone and the [Customizations for AWS Control Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html) solution are deployed. You need to deploy the solution only on that account and only in that AWS Region. During the AWS account enrolment Netskope orchestration will provision appropriate cross-account AWS IAM roles in all the regions you opted in for. 
+The solution source code can be found on [GitHub](https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower). This GitHub repository contains two AWS CloudFormation templates and the manifest file. The first template, Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml shall be deployed in the same AWS account and Region where your Control Tower landing zone and the [Customizations for AWS Control Tower](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/considerations.html) solution are deployed. You need to deploy the solution only on that account and only in that AWS Region. During the AWS account enrolment Netskope orchestration will provision appropriate cross-account AWS IAM roles in all the regions you opted in for. 
 
 The CloudFormation stack deployed using this template on the Control
 Tower landing zone account creates the following resources on that
@@ -120,19 +120,19 @@ git clone 
 3.  Click Create Stack and choose With new resources (standard).
 
 ![Graphical user interface, application, Teams Description automatically
-generated](media/image1.png){width="6.5in"
+generated](media/picture1.png){width="6.5in"
 height="1.2381944444444444in"}
 
 4.  Choose Upload a template file and click on Choose file.
 
 ![Graphical user interface, text, application, email Description
-automatically generated](media/image2.png){width="6.5in"
+automatically generated](media/picture2.png){width="6.5in"
 height="2.660416666666667in"}
 
 5.  Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from
     the disk, click Open and then click Next.
 
-![Graphical user interface, text, application, email Description automatically generated](media/image3.png){width="5.968253499562555in"
+![Graphical user interface, text, application, email Description automatically generated](media/picture3.png){width="5.968253499562555in"
  height="3.1824311023622047in"}
 
 6.  Enter the stack name and the parameters for your deployment:
@@ -179,7 +179,7 @@ height="2.660416666666667in"}
 +-----------------------+----------------------------------------------+
 
 ![Graphical user interface, application Description automatically
-generated](media/image4.png){width="5.634235564304462in"
+generated](media/picture4.png){width="5.634235564304462in"
 height="6.503449256342957in"}
 
 7.  Click Next.
@@ -187,23 +187,23 @@ height="6.503449256342957in"}
 8.  Optionally, enter the Tags for your CloudFormation stack and / or
     click Next.
 
-> ![Graphical user interface, application Description automatically
-> generated](media/image5.png){width="5.491870078740157in"
-> height="4.133570647419073in"}
+ ![Graphical user interface, application Description automatically
+ generated](media/picture5.png){width="5.491870078740157in"
+ height="4.133570647419073in"}
 
 9.  Acknowledge creating IAM resources and click Create stack.
 
-> ![Graphical user interface, text, application Description
-> automatically generated](media/image6.png){width="5.313136482939632in"
-> height="3.058459098862642in"}
+ ![Graphical user interface, text, application Description
+ automatically generated](media/picture6.png){width="5.313136482939632in"
+ height="3.058459098862642in"}
 
 10. When CloudFormation stack is in the CREATE_COMPLETE state, you can
     navigate to the Resources tab and see the resources created by the
     stack.
 
-> ![Graphical user interface, text, application, email Description
-> automatically generated](media/image7.png){width="5.986206255468066in"
-> height="2.2224431321084865in"}
+![Graphical user interface, text, application, email Description
+ automatically generated](media/picture7.png){width="5.986206255468066in"
+ height="2.2224431321084865in"}
 
 11. Later, after you deploy the AWS IAM cross-account roles used by
     Netskope using the Customizations for AWS Control Tower, you can
@@ -213,10 +213,10 @@ height="6.503449256342957in"}
     function.
 
 ![Graphical user interface, text, application, email Description
-automatically generated](media/image8.png){width="6.5in"
+automatically generated](media/picture8.png){width="6.5in"
 height="2.084722222222222in"}
 
-2.  ## Deploy the AWS IAM cross-account roles using the Customizations for AWS Control Tower.
+2.  # Deploy the AWS IAM cross-account roles using the Customizations for AWS Control Tower.
 
     1.  Open the manifest.yaml file you cloned from the GitHub repository. 
 
@@ -230,11 +230,11 @@ To find the TrustedAccountID and the ExternalID please follow the steps below:
 
 2.   In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
 
-> ![Graphical user interface, text, application, email Description
-> automatically generated](media/image9.png){width="4.362069116360455in"
-> height="3.0534481627296586in"}
+ ![Graphical user interface, text, application, email Description
+ automatically generated](media/picture9.png){width="4.362069116360455in"
+ height="3.0534481627296586in"}
 
- Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/image10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
+ Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/picture10.png){width="5.140900043744532in" height="3.1674759405074364in"}window. 
 
 # 
 
@@ -243,23 +243,14 @@ To find the TrustedAccountID and the ExternalID please follow the steps below:
  Statement:
 
   - Action:
-
   - sts:AssumeRole
-
   Condition:
-
   StringEquals:
-
   sts:ExternalId:01234567890abcdef01234567890abcdef0123456
-
   Effect: Allow
-
   Principal:
-
   AWS:
-
   - arn:aws:iam::123456789012:root
-
   Sid: \'\'
 
 The value of sts:ExternalId is your ExternalID and the account ID in the
@@ -286,7 +277,7 @@ similar to the steps using AWS CodeCommit below.
 
  Sign into the AWS CodeCommit management console, choose the custom-control-tower-configuration repository and copy its HTTPS (GRC) URL:
 
- ![A screenshot of a computer Description automatically generated](media/image11.png){width="5.879311023622047in" height="1.180259186351706in"}
+ ![A screenshot of a computer Description automatically generated](media/picture11.png){width="5.879311023622047in" height="1.180259186351706in"}
 
  If not yet installed, install the git-remote-codecommit package in your local machine:
 
@@ -298,7 +289,7 @@ pip install git-remote-codecommit
 
 git clone (HTTPS (GRC) URL copied above)
 
-# Replace the manifest.yaml file in the cloned repository by the one you edited above. 
+ Replace the manifest.yaml file in the cloned repository by the one you edited above. 
 
 cd control-tower-configuration
 
@@ -306,7 +297,7 @@ cp \<new manifest.yaml file>
 
 # 
 
-# Check in the manifest file with the customizations for Netskope cross-accounts AWS IAM roles deployment into the CodeCommit repository:
+ Check in the manifest file with the customizations for Netskope cross-accounts AWS IAM roles deployment into the CodeCommit repository:
 
 git status git add -A
 
@@ -314,34 +305,16 @@ git commit -m 'Netskope Automatic Accounts enrollment'
 
 git push
 
-# You can check the progress of deploying Netskope cross-account AWS IAM roles on the CodePipeline. 
+ You can check the progress of deploying Netskope cross-account AWS IAM roles on the CodePipeline. 
 
-12. # Navigate to [AWS CodePipeline Console](https://console.aws.amazon.com/codepipeline/) on your Management account.
+12.  Navigate to [AWS CodePipeline Console](https://console.aws.amazon.com/codepipeline/) on your Management account.
 
-13. # Choose Custom-Control-Tower-CodePipeline to track the status of the pipeline at various stages.
+13.  Choose Custom-Control-Tower-CodePipeline to track the status of the pipeline at various stages.
 
-14. # When the last stage of the Netskope customization will be complete, open the Netskope tenant management console, navigate to Settings \> API-enabled Protection \> IaaS and check that your existing AWS accounts configured in the manifest file successfully enrolled in the Netskope CSPM and Storage Scan services. 
+14.  When the last stage of the Netskope customization will be complete, open the Netskope tenant management console, navigate to Settings \> API-enabled Protection \> IaaS and check that your existing AWS accounts configured in the manifest file successfully enrolled in the Netskope CSPM and Storage Scan services. 
 
-# Now, when you provision a new AWS account using AWS Control Tower account factory, the solution will automatically enroll that account in the Netskope CSPM and Storage Scan services if this account belongs to the one of the AWS Organization's Units previously provisioned in the manifest file.
+ Now, when you provision a new AWS account using AWS Control Tower account factory, the solution will automatically enroll that account in the Netskope CSPM and Storage Scan services if this account belongs to the one of the AWS Organization's Units previously provisioned in the manifest file.
 
-# You've just seen how you can automatically enroll your existing AWS accounts, managed by the AWS Control Tower, as well as new AWS account provisioned with AWS Control Tower account factory into the Netskope Cloud Security Posture Management and Storage DLP and malware scan. 
+ You've just seen how you can automatically enroll your existing AWS accounts, managed by the AWS Control Tower, as well as new AWS account provisioned with AWS Control Tower account factory into the Netskope Cloud Security Posture Management and Storage DLP and malware scan. 
 
-# 
-
-# 
-
-# 
-
-# 
-
-# 
-
-# 
-
-# 
-
-# 
-
-# 
-
-# 
+ 
