@@ -3,6 +3,7 @@
 region: us-east-2  # Control Tower Home Region
 version: 2021-03-15
 
+
 resources:
   # ControlTower Custom SCPs - Additional Preventive Guardrails
   - name: provision-Netskope-role 
