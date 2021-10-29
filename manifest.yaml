@@ -3,7 +3,6 @@
 region: us-east-2  # Control Tower Home Region
 version: 2021-03-15
 
-
 resources:
   # ControlTower Custom SCPs - Additional Preventive Guardrails
   - name: provision-Netskope-role 
@@ -28,7 +27,7 @@ resources:
         # Observe the names of your existing OUs and comment out or uncomment below to match yours.
         #- Security # Foremerly Core
         - Sandbox
-        #- Core
+        - Core
         #- Custom
     regions:
       - us-east-2

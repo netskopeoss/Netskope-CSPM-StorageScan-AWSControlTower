@@ -281,11 +281,9 @@ Resources:
                   response = call_api(request_url, request_body)
                   if response["status"] == "success":
                       logger.info('Successfully enrolled account '+account_id+' account name '+instance_name+' Exiting...')
-                      return 1
                   else:
                       logger.error('Failed to enroll account '+account_id+' account name '+instance_name+' Exiting...')
-                      return 0
-                      
+          
           def call_api(request_url, request_body):        
                   count = 3
                   json_resp=''
@@ -423,6 +421,9 @@ Resources:
           inputDetails:
               included: 
                 - true
+          stateMachineArn:
+            - !Sub arn:${AWS::Partition}:states:${AWS::Region}:${AWS::AccountId}:stateMachine:CustomControlTowerStackSetStateMachine
+    
       State: "ENABLED"
       Targets: 
         - 
