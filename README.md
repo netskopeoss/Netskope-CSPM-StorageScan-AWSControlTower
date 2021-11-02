@@ -4,7 +4,7 @@ Tower](https://aws.amazon.com/controltower/?control-blogs.sort-by=item.additiona
 into the [Netskope Cloud Security Posture Management (CSPM) and Storage
 Scan storage
 services](https://www.netskope.com/products/public-cloud-security).
-
+ 
 AWS Control Tower provides the easiest way to set up and govern a
 secure, multi-account AWS environment and to implement AWS best security
 practices.

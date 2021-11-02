@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "Netskope CSPM Account Enrolment Template for AWS Control Tower. This template creates CloudWath event triggered by CreateManagedAccount 
   and UpdateManagedAccount CT lifecycle events, which triggers the Lambda function calling Netskope Create an AWS Instance API to enroll the newly created account in Netskope CSPM"
 
+
 Metadata: 
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
