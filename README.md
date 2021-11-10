@@ -4,31 +4,7 @@
 
 ***Cloud Security Posture Management and Storage Scan services***
 
-![](media/image1.tiff){width="6.768055555555556in" height="1.0694444444444444in"}
-
-# Table of Contents {#table-of-contents .TOC-Heading}
-
-[Foreword [3](#foreword)](#foreword)
-
-[Solution overview and features [4](#solution-overview-and-features)](#solution-overview-and-features)
-
-[Architecture diagram [4](#architecture-diagram)](#architecture-diagram)
-
-[Pre-requisites [6](#_Toc86351490)](#_Toc86351490)
-
-[Deployment and Configuration Steps [7](#deployment-and-configuration-steps)](#deployment-and-configuration-steps)
-
-[Netskope Configuration - Rest API Token and External ID [8](#netskope-configuration---rest-api-token-and-external-id)](#netskope-configuration---rest-api-token-and-external-id)
-
-[Configure Account Enrollment Template [10](#configure-account-enrollment-template)](#configure-account-enrollment-template)
-
-[Using the integration [15](#using-the-integration)](#using-the-integration)
-
-[Best Practices [18](#_Toc86351495)](#_Toc86351495)
-
-[Solution Estimated Pricing [18](#_Toc86351496)](#_Toc86351496)
-
-[Partner contact information [18](#_heading=h.d2xxkpwau5qx)](#_heading=h.d2xxkpwau5qx)
+#  {#section .TOC-Heading}
 
 # Foreword
 
@@ -86,7 +62,7 @@ When you trigger the CfCT code pipeline, the CfCT solution deploys AWS CloudForm
 
 Later, when you create a new managed account using [[AWS Control Tower Account Factory]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [[AWS Control Tower Lifecycle Event]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
 
-[]{#_Toc86351490 .anchor}Pre-requisites
+Pre-requisites
 
 The following pre-requisites are required to implement the Netskope integration with AWS Control Tower:
 
@@ -358,7 +334,7 @@ To view your AWS instances and services, sign into the Netskope Management conso
 
 ![Graphical user interface, application Description automatically generated](media/image24.png){width="6.5404188538932635in" height="3.4205325896762906in"}
 
-Next, you can configure Netskope Security Posture policies that will provide you a clear picture of your cloud security posture and enable you to see how the environment is performing against standards and best practices like CIS (Center for Internet Security) benchmarks.
+Next, you can configure Netskope Security Posture policies that will provide you a clear Image of your cloud security posture and enable you to see how the environment is performing against standards and best practices like CIS (Center for Internet Security) benchmarks.
 
 To configure Netskope Security Posture policies, on the Netskope Management console navigate to Policies-\>Security Posture and click New Policy.
 
@@ -388,13 +364,11 @@ The results of the DLP and Malware scans can be consumed by the Alerts REST API 
 
 For more information about Netskope CSPM and Storage Scan services, please refer to the [[Netskope Knowledge Portal]{.underline}](https://docs.netskope.com/?lang=en) and the [[Netskope Community]{.underline}](https://community.netskope.com/).
 
-[]{#_Toc86351495 .anchor}Best Practices
+Best Practices
 
 -   Visit [Netskope Knowledge portal](https://docs.netskope.com/index.html?lang=en) to learn more about Netskope product setup, administration and features.
 
 -   Find the latest resource such as blogs, case studies and references in [Netskope resource center.](https://resources.netskope.com/)
-
-[]{#_heading=h.d2xxkpwau5qx .anchor}
 
 Partner contact information
 
