@@ -1,10 +1,10 @@
 **Implementation Guide:**
 
-**Netskope AWS Control Tower Integration**
+***Netskope AWS Control Tower Integration***
 
-***Cloud Security Posture Management and Storage Scan services***
+**Cloud Security Posture Management and Storage Scan services**
 
-#  {#section .TOC-Heading}
+
 
 # Foreword
 
@@ -14,7 +14,7 @@ The purpose of this AWS Implementation Guide is to enable every AWS Marketplace 
 
 # Solution overview and features
 
-[[Netskope Cloud Security Posture Management (CSPM)]{.underline}](https://www.netskope.com/products/public-cloud-security) and Storage Scan allows organizations to confidently adopt and secure multi-cloud services. The Netskope solution gives organizations the ability to continuously assess public cloud deployments to mitigate risk, detect threats, scan and protect sensitive data, and monitor for regulatory compliance. Netskope simplifies the discovery and remediation of misconfigurations across your clouds to help prevent data loss and inadvertent exposure.
+[Netskope Cloud Security Posture Management (CSPM)](https://www.netskope.com/products/public-cloud-security) and Storage Scan allows organizations to confidently adopt and secure multi-cloud services. The Netskope solution gives organizations the ability to continuously assess public cloud deployments to mitigate risk, detect threats, scan and protect sensitive data, and monitor for regulatory compliance. Netskope simplifies the discovery and remediation of misconfigurations across your clouds to help prevent data loss and inadvertent exposure.
 
 Netskope helps organizations maintain compliance and best practices, provides the ability to audit security configurations and prevent data exposure, and detect "shadow IaaS" services with real-time controls. With these controls you can stop data exfiltration from external and internal threat actors and protect your sensitive data.
 
