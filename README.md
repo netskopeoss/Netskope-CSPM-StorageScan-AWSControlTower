@@ -58,7 +58,7 @@ When you trigger the CfCT code pipeline, the CfCT solution deploys AWS CloudForm
 
 Later, when you create a new managed account using [AWS Control Tower Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [AWS Control Tower Lifecycle Event](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
 
-Pre-requisites
+**Pre-requisites**
 
 The following pre-requisites are required to implement the Netskope integration with AWS Control Tower:
 
@@ -172,7 +172,7 @@ Sign into the AWS Control Tower Management account as administrator and deploy t
 
 2.  Click **Create Stack** and choose **With new resources (standard)**.
 
-> ![Graphical user interface, application, Teams Description automatically generated](media/Picture10.png)
+ ![Graphical user interface, application, Teams Description automatically generated](media/Picture10.png)
 
 3.  Choose **Upload a template file** then click on Choose file. Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from the directory on your disk where you cloned the GitHub repository to, click **Open** and then click **Next**.
 
@@ -233,35 +233,35 @@ Next, you need to deploy AWS IAM cross-account role that will be used by the Net
 
     2.  In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
 
-> ![Graphical user interface, text, application, email Description automatically generated](media/Picture16.png)
+ ![Graphical user interface, text, application, email Description automatically generated](media/Picture16.png)
 
 3.  Download the CFT file and close the New Setup - Amazon Web Services.
 
-> ![Graphical user interface, text, application, email Description automatically generated](media/Picture17.png)
+ ![Graphical user interface, text, application, email Description automatically generated](media/Picture17.png)
 
 4.  Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:
 
- Statement:
+ > Statement:
 
-  - Action:
+ > - Action:
 
-  - sts:AssumeRole
+ > - sts:AssumeRole
 
-  Condition:
+ > Condition:
 
-  StringEquals:
+ > StringEquals:
 
-  sts:ExternalId:01234567890abcdef01234567890abcdef0123456
+ > sts:ExternalId:01234567890abcdef01234567890abcdef0123456
 
-  Effect: Allow
+ > Effect: Allow
 
-  Principal:
+ > Principal:
 
-  AWS:
+ > AWS:
 
-  - arn:aws:iam::123456789012:root
+ > - arn:aws:iam::123456789012:root
 
-> The value of sts:ExternalId is your ExternalID and the account ID in the AWS account ARN is your TrustedAccountID
+ The value of sts:ExternalId is your ExternalID and the account ID in the AWS account ARN is your TrustedAccountID
 
 4.  Set the values for the **SecurityScan**, **DLPScan** and **TrustedAccountID** to true or false to configure the Netskope Security Cloud functionality you'd like to use to protect your AWS accounts.
 
@@ -275,15 +275,15 @@ This instruction assume that you are using AWS [CodeCommit](https://aws.amazon.c
 
 7.  Sign into the AWS CodeCommit management console, choose the **custom-control-tower-configuration** repository and copy its **HTTPS (GRC) URL**:
 
-> ![A screenshot of a computer Description automatically generated](media/Picture18.png)
+ ![A screenshot of a computer Description automatically generated](media/Picture18.png)
 
 8.  If not yet installed, install the git-remote-codecommit package in your local machine:
 
-pip install git-remote-codecommit
+> pip install git-remote-codecommit
 
 9.  Assuming you already have proper AWS CLI credentials for accessing the control-tower-configuration repository in your Control Tower landing zone management account, clone this repository to your local machine:
 
-git clone (HTTPS (GRC) URL copied above
+> git clone (HTTPS (GRC) URL copied above
 
 1.  Replace the manifest.yaml file in the cloned repository by the one you edited above.
 
@@ -359,7 +359,7 @@ The results of the DLP and Malware scans can be consumed by the Alerts REST API 
 
 For more information about Netskope CSPM and Storage Scan services, please refer to the [Netskope Knowledge Portal](https://docs.netskope.com/?lang=en) and the [Netskope Community](https://community.netskope.com/).
 
-Best Practices
+**Best Practices**
 
 -   Visit [Netskope Knowledge portal](https://docs.netskope.com/index.html?lang=en) to learn more about Netskope product setup, administration and features.
 
