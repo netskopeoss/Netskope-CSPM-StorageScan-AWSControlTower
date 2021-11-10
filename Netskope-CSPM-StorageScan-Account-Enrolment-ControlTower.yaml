@@ -2,7 +2,6 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: "Netskope CSPM Account Enrolment Template for AWS Control Tower. This template creates CloudWath event triggered by CreateManagedAccount 
   and UpdateManagedAccount CT lifecycle events, which triggers the Lambda function calling Netskope Create an AWS Instance API to enroll the newly created account in Netskope CSPM"
 
-
 Metadata: 
   AWS::CloudFormation::Interface: 
     ParameterGroups: 
@@ -12,8 +11,6 @@ Metadata:
         Parameters: 
           - TenantUrl
           - NetskopeAPIToken
-          - TrustedAccountID
-          - ExternalID
       - 
         Label: 
           default: "AWS Organization info"
@@ -35,10 +32,6 @@ Metadata:
         default: "Netskope tenant FQDN"
       NetskopeAPIToken: 
         default: "Netskope tenant REST API token"
-      TrustedAccountID: 
-        default: "Netskope AWS Account ID"
-      ExternalID: 
-        default: "STS external ID"
       AWSOrgID: 
         default: "AWS PrincipalOrgID"
       AdminEmailAddress: 
@@ -54,8 +47,6 @@ Metadata:
       KmsKeyId:
         default: 'AWS KMS Key ID'
 
-
-
 Parameters:
   NetskopeAPIToken:
     Type: String
@@ -70,21 +61,21 @@ Parameters:
     Description: 'Enter Netskope tenant FQDN (f.e. example.goskope.com)'
   SecurityScan:
     Type: String
-    Default: 'true'
+    Default: true
     Description: 'Enter ( "true", "false" ), whether Security violations Scan is enabled'
     AllowedValues:
       - true
       - false
   DLPScan:
     Type: String
-    Default: 'true'
+    Default: true
     Description: 'Enter ( "true", "false" ), whether DLP Scan is enabled'
     AllowedValues:
       - true
       - false
   MalwareScan:
     Type: String
-    Default: 'true'
+    Default: true
     Description: 'Enter ( "true", "false" ), whether Malware Scan is enabled'
     AllowedValues:
       - true
@@ -99,12 +90,6 @@ Parameters:
       - '120'
       - '360'
       - '1440'
-  TrustedAccountID:
-    Type: String
-    Description: 'Enter Netskope trusted AWS Account ID provided by Netskope'
-  ExternalID:
-    Type: String
-    Description: 'Enter STS external ID provided by Netskope'
   AdminEmailAddress:
     Type: String
     Description: 'Enter your Security Administrator email address'
@@ -164,9 +149,9 @@ Resources:
   NetskopeAddInstanceLambda:
     Condition: AnyFeatureEnabled
     Type: 'AWS::Lambda::Function'
-    Description: Funciton to automatically enroll AWS account in the Netskope CSPM, storage DLP and malware scan
     Properties:
       FunctionName: NetskopeAutoAddInstanceLambda
+      Description: Function to automatically enroll AWS account in the Netskope CSPM, storage DLP and malware scan
       Handler: index.handler
       Role: !GetAtt 
         - NetskopeLambdaAccessRole
@@ -282,9 +267,11 @@ Resources:
                   response = call_api(request_url, request_body)
                   if response["status"] == "success":
                       logger.info('Successfully enrolled account '+account_id+' account name '+instance_name+' Exiting...')
+                      #return 1
                   else:
                       logger.error('Failed to enroll account '+account_id+' account name '+instance_name+' Exiting...')
-          
+                      #return 0
+                      
           def call_api(request_url, request_body):        
                   count = 3
                   json_resp=''
@@ -420,11 +407,10 @@ Resources:
           status: 
             - "SUCCEEDED"
           inputDetails:
-              included: 
-                - true
+            included: 
+              - true
           stateMachineArn:
-            - !Sub arn:${AWS::Partition}:states:${AWS::Region}:${AWS::AccountId}:stateMachine:CustomControlTowerStackSetStateMachine
-    
+            - !Sub "arn:${AWS::Partition}:states:${AWS::Region}:${AWS::AccountId}:stateMachine:CustomControlTowerStackSetStateMachine"
       State: "ENABLED"
       Targets: 
         - 

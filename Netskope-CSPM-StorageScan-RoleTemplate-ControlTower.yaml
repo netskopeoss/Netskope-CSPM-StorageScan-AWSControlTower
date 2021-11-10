@@ -2,21 +2,21 @@ Description: Netskope cross-account Role provisioning for use with AWS CT custom
 Parameters:
   SecurityScan:
     Type: String
-    Default: 'true'
+    Default: true
     Description: 'Enter ( "true", "false" ), whether security scan is enabled.'
     AllowedValues:
       - true
       - false
   DLPScan:
     Type: String
-    Default: 'true'
+    Default: true
     Description: 'Enter ( "true", "false" ), whether DLP Scan is enabled.'
     AllowedValues:
       - true
       - false
   MalwareScan:
     Type: String
-    Default: 'false'
+    Default: false
     Description: 'Enter ( "true", "false" ), whether Malware Scan is enabled'
     AllowedValues:
       - true

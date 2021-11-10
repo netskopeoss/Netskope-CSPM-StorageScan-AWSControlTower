@@ -4,7 +4,7 @@ Tower](https://aws.amazon.com/controltower/?control-blogs.sort-by=item.additiona
 into the [Netskope Cloud Security Posture Management (CSPM) and Storage
 Scan storage
 services](https://www.netskope.com/products/public-cloud-security).
- 
+
 AWS Control Tower provides the easiest way to set up and govern a
 secure, multi-account AWS environment and to implement AWS best security
 practices.
@@ -99,6 +99,8 @@ SUCCEEDED event in the Amazon CloudWatch which triggers the
 NetskopeAutoAddInstanceLambda Lambda function which configures your AWS
 account in the Netskope tenant.
 
+ControlTowerIntegration.png
+
 You can find more information about Customizations for AWS Control Tower [here](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/).
 
 Please also refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details.
@@ -118,22 +120,16 @@ git clone https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTo
 
 3.  Click Create Stack and choose With new resources (standard).
 
-![image](media/Picture1.png =250x){width="6.5in"
-height="2.660416666666667in"}
-
 <img src="media/Picture1.png" width="1000" />
 
 4.  Choose Upload a template file and click on Choose file.
 
-![Graphical user interface, text, application, email Description
-automatically generated](media/Picture2.png){: width="6.5in"
-height="2.660416666666667in"}
+<img src="media/media/Picture2.png" width="1000" />
 
 5.  Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from
     the disk, click Open and then click Next.
 
-![Graphical user interface, text, application, email Description automatically generated](media/Picture3.png){: width="5.968253499562555in"
- height="3.1824311023622047in"}
+<img src="media/media/Picture3.png" width="1000" />
 
 6.  Enter the stack name and the parameters for your deployment:
 
@@ -178,18 +174,14 @@ height="2.660416666666667in"}
 | enabled               | Netskope storage Malware Scan is enabled     |
 +-----------------------+----------------------------------------------+
 
-![Graphical user interface, application Description automatically
-generated](media/Picture4.png){: width="5.634235564304462in"
-height="6.503449256342957in"}
+<img src="media/media/Picture4.png" width="1000" />
 
 7.  Click Next.
 
 8.  Optionally, enter the Tags for your CloudFormation stack and / or
     click Next.
 
- ![Graphical user interface, application Description automatically
- generated](media/Picture5.png){: width="5.491870078740157in"
- height="4.133570647419073in"}
+ <img src="media/media/Picture5.png" width="1000" />
 
 9.  Acknowledge creating IAM resources and click Create stack.
 
@@ -234,8 +226,11 @@ To find the TrustedAccountID and the ExternalID please follow the steps below:
  automatically generated](media/Picture9.png){: width="4.362069116360455in"
  height="3.0534481627296586in"}
 
- Download the CFT file and close the New Setup - Amazon Web Services ![Graphical user interface, text, application, email Description automatically generated](media/Picture10.png){: width="5.140900043744532in" height="3.1674759405074364in"}window. 
+ Download the CFT file and close the New Setup - Amazon Web Services 
 
+ ![Graphical user interface, text, application, email Description automatically generated](media/Picture10.png){: width="5.140900043744532in" height="3.1674759405074364in"}window. 
+
+<img src="media/media/Picture2.png" width="1000" />
 # 
 
  Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:

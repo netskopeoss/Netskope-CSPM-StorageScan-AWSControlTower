@@ -8,7 +8,7 @@ resources:
   # ControlTower Custom SCPs - Additional Preventive Guardrails
   - name: provision-Netskope-role 
     description: Provision cross-account IAM role for Netskope CSPM and storage scan access
-    resource_file: s3://netskope-oss-source-bucket-us-east-2/AWS-CT/NetskopeCSPMRoleTemplateCT.yaml
+    resource_file: https://netskope-oss-source-bucket-us-east-2.s3.us-east-2.amazonaws.com/AWS-CT/NetskopeCSPMRoleTemplateCT.yaml
     parameters:
       - parameter_key: SecurityScan
         parameter_value: true
@@ -28,7 +28,7 @@ resources:
         # Observe the names of your existing OUs and comment out or uncomment below to match yours.
         #- Security # Foremerly Core
         - Sandbox
-        - Core
+        #- Core
         #- Custom
     regions:
       - us-east-2
