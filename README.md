@@ -2,7 +2,7 @@
 
 # Netskope AWS Control Tower Integration
 
-***Cloud Security Posture Management and Storage Scan services***
+# Cloud Security Posture Management and Storage Scan services***
 
 
 **Foreword**
@@ -25,7 +25,7 @@ With the integration between AWS Control Tower and Netskope CSPM and Storage Sca
 
 **Architecture diagram**
 
-![](media/image2.png){width="6.767716535433071in" height="4.861111111111111in"}
+![](media/Picture2.png){width="6.767716535433071in" height="4.861111111111111in"}
 
 *Figure 1. Netskope CSPM and Storage Scan service with AWS Control Tower Architecture Diagram*
 
@@ -43,7 +43,7 @@ When you trigger the CfCT code pipeline, the CfCT solution deploys AWS CloudForm
 
 Later, when you create a new managed account using [AWS Control Tower Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [AWS Control Tower Lifecycle Event](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
 
-![](media/image2.png){width="6.767716535433071in" height="4.861111111111111in"}
+![](media/Picture2.png){width="6.767716535433071in" height="4.861111111111111in"}
 
 *Figure 1. Netskope CSPM and Storage Scan service with AWS Control Tower Architecture Diagram*
 
@@ -89,7 +89,7 @@ Step 1.1: Subscribe to Netskope CSPM & Storage Scan on AWS Marketplace.
 
 Locate the [**Netskope Public Cloud Security** in the AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-rhphwiywrinha?ref_=srh_res_product_title).
 
-![](media/image3.png){width="6.768055555555556in" height="2.095138888888889in"}
+![](media/Picture3.png){width="6.768055555555556in" height="2.095138888888889in"}
 
 Click on the **Continue to Subscribe** button.
 
@@ -97,7 +97,7 @@ Click on the **Continue to Subscribe** button.
 
 In the new screen, you can configure your contract. You can select the **Contract Duration** and set the
 
-![Graphical user interface, text, application, email Description automatically generated](media/image4.png){width="6.767716535433071in" height="7.416666666666667in"} **Renewal Settings**. 1 year option (to add when publish listing)
+![Graphical user interface, text, application, email Description automatically generated](media/Picture4.png){width="6.767716535433071in" height="7.416666666666667in"} **Renewal Settings**. 1 year option (to add when publish listing)
 
 \<Contract duration page ScreenShot>
 
@@ -105,7 +105,7 @@ In the new screen, you can configure your contract. You can select the **Contrac
 
 Select the Contract Options to be activated with your contract. Please note that this solution is applicable for **CASB_API** and **IAAS_STORAGE**
 
-![Graphical user interface, text, application, email Description automatically generated](media/image5.png){width="6.767716535433071in" height="7.416666666666667in"}
+![Graphical user interface, text, application, email Description automatically generated](media/Picture5.png){width="6.767716535433071in" height="7.416666666666667in"}
 
 **Step 1.4: Create the Contract and Pay**
 
@@ -125,13 +125,13 @@ To complete registration, choose Setup your account and follow the remaining ins
 
 Using your Netskope tenant URL, login to your Netskope portal.
 
-![](media/image6.png){width="2.20209864391951in" height="2.0092596237970253in"}
+![](media/Picture6.png){width="2.20209864391951in" height="2.0092596237970253in"}
 
 **Step 2.2: Create Rest API Token**
 
 From Netskope console, select **Settings \> Tools \> REST API v1** from the side-bar navigation.
 
-![](media/image7.png){width="5.601851487314086in" height="1.6019247594050743in"}
+![](media/Picture7.png){width="5.601851487314086in" height="1.6019247594050743in"}
 
 Choose **Generate New Token** and take a note of the token id and keep it secure.
 
@@ -139,7 +139,7 @@ Choose **Generate New Token** and take a note of the token id and keep it secure
 
 From Netskope console, navigate to **Settings \> API-enabled Protection \> IaaS**, then select **AWS** and click **Setup**.
 
-![](media/image8.png){width="5.7037040682414695in" height="1.732296587926509in"}
+![](media/Picture8.png){width="5.7037040682414695in" height="1.732296587926509in"}
 
 In the **New Setup** window, enter the following details:
 
@@ -147,15 +147,15 @@ In the **New Setup** window, enter the following details:
 
 -   Keep the default service checked and click **Next**.
 
-![](media/image9.png){width="5.361111111111111in" height="3.8109765966754154in"}
+![](media/Picture9.png){width="5.361111111111111in" height="3.8109765966754154in"}
 
 On the next dialog window, download the CFT file and exit the **New Setup** window.
 
-![](media/image10.png){width="5.361111111111111in" height="3.231738845144357in"}
+![](media/Picture10.png){width="5.361111111111111in" height="3.231738845144357in"}
 
 Open the CFT file using any text editor and search for the *ExternalId*. Copy the value for both the ExternalId and the AWS account ID (see reference below).
 
-![](media/image11.png){width="4.408733595800525in" height="2.5092596237970253in"}
+![](media/Picture11.png){width="4.408733595800525in" height="2.5092596237970253in"}
 
 **Configure Account Enrollment Template**
 
@@ -173,11 +173,11 @@ Sign into the AWS Control Tower Management account as administrator and deploy t
 
 2.  Click **Create Stack** and choose **With new resources (standard)**.
 
-> ![Graphical user interface, application, Teams Description automatically generated](media/image12.png){width="6.5in" height="1.2381944444444444in"}
+> ![Graphical user interface, application, Teams Description automatically generated](media/Picture12.png){width="6.5in" height="1.2381944444444444in"}
 
 3.  Choose **Upload a template file** then click on Choose file. Choose the Netskope-CSPM-StorageScan-Account-Enrolment-ControlTower.yaml from the directory on your disk where you cloned the GitHub repository to, click **Open** and then click **Next**.
 
-![Graphical user interface, text, application, email Description automatically generated](media/image13.png){width="6.5in" height="2.660416666666667in"}
+![Graphical user interface, text, application, email Description automatically generated](media/Picture13.png){width="6.5in" height="2.660416666666667in"}
 
 4.  Enter the stack name and the parameters for your deployment:
 
@@ -201,21 +201,21 @@ Sign into the AWS Control Tower Management account as administrator and deploy t
   MalwareScan Scan enabled               Enter ( \"true\", \"false\" ), whether Netskope storage Malware Scan is enabled
   -------------------------------------- ------------------------------------------------------------------------------------------------------------------------
 
-![Graphical user interface, application Description automatically generated](media/image14.png){width="5.6484044181977255in" height="6.519804243219598in"}
+![Graphical user interface, application Description automatically generated](media/Picture14.png){width="5.6484044181977255in" height="6.519804243219598in"}
 
 5.  Click **Next**.
 
 6.  Optionally, enter the Tags for your CloudFormation stack and / or click Next.
 
-![Graphical user interface, application Description automatically generated](media/image15.png){width="5.49667104111986in" height="4.137183945756781in"}
+![Graphical user interface, application Description automatically generated](media/Picture15.png){width="5.49667104111986in" height="4.137183945756781in"}
 
 7.  Acknowledge creating IAM resources and click **Create stack**.
 
-![Graphical user interface, text, application Description automatically generated](media/image16.png){width="5.468659230096238in" height="3.147985564304462in"}
+![Graphical user interface, text, application Description automatically generated](media/Picture16.png){width="5.468659230096238in" height="3.147985564304462in"}
 
 8.  When CloudFormation stack is in the CREATE_COMPLETE state, you can navigate to the Resources tab and see the resources created by the stack.
 
-![Graphical user interface, text, application, email Description automatically generated](media/image17.png){width="6.722222222222222in" height="2.4907403762029747in"}
+![Graphical user interface, text, application, email Description automatically generated](media/Picture17.png){width="6.722222222222222in" height="2.4907403762029747in"}
 
 You deployed the Netskope enrollment automation solution for AWS accounts managed by AWS Control Tower. This template deploys the AWS Lambda function that will perform account registration in Netskope.
 
@@ -235,11 +235,11 @@ Next, you need to deploy AWS IAM cross-account role that will be used by the Net
 
     2.  In the New Setup window, enter the 12 digits of any of your AWS accounts ID, followed by the account name. Follow the format as described in the text box. Keep the default service checked and click Next.
 
-> ![Graphical user interface, text, application, email Description automatically generated](media/image18.png){width="4.370543525809274in" height="3.0593799212598425in"}
+> ![Graphical user interface, text, application, email Description automatically generated](media/Picture18.png){width="4.370543525809274in" height="3.0593799212598425in"}
 
 3.  Download the CFT file and close the New Setup - Amazon Web Services.
 
-> ![Graphical user interface, text, application, email Description automatically generated](media/image19.png){width="5.169653324584427in" height="3.185191382327209in"}
+> ![Graphical user interface, text, application, email Description automatically generated](media/Picture19.png){width="5.169653324584427in" height="3.185191382327209in"}
 
 4.  Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:
 
@@ -277,7 +277,7 @@ This instruction assume that you are using AWS [CodeCommit](https://aws.amazon.c
 
 7.  Sign into the AWS CodeCommit management console, choose the **custom-control-tower-configuration** repository and copy its **HTTPS (GRC) URL**:
 
-> ![A screenshot of a computer Description automatically generated](media/image20.png){width="5.899311023622047in" height="1.1842738407699038in"}
+> ![A screenshot of a computer Description automatically generated](media/Picture20.png){width="5.899311023622047in" height="1.1842738407699038in"}
 
 8.  If not yet installed, install the git-remote-codecommit package in your local machine:
 
@@ -309,15 +309,15 @@ After you have triggered the Customizations for AWS Control Tower workflow for d
 
 2.  Choose **Custom-Control-Tower-CodePipeline** to track the status of the pipeline at various stages.
 
-![Graphical user interface, application, Teams Description automatically generated](media/image21.png){width="6.768055555555556in" height="3.4770833333333333in"}
+![Graphical user interface, application, Teams Description automatically generated](media/Picture21.png){width="6.768055555555556in" height="3.4770833333333333in"}
 
 3.  When the last stage of the pipeline completed, open the Netskope management console, navigate to **Settings \> API-enabled Protection \> IaaS** and check that your existing AWS accounts configured in the manifest file successfully enrolled in the Netskope CSPM and Storage Scan services.
 
-![Graphical user interface, application, Teams Description automatically generated](media/image22.png){width="6.804141513560805in" height="2.75in"}
+![Graphical user interface, application, Teams Description automatically generated](media/Picture22.png){width="6.804141513560805in" height="2.75in"}
 
 4.  You also you can monitor the NetskopeAutoAddInstanceLambda automation Lambda function execution logs by opening AWS CloudWatch management console, navigating to **Logs -\> Log groups** menu and choosing the NetskopeAutoAddInstanceLambda log group for your Lambda function.
 
-![Graphical user interface, text, application, email Description automatically generated](media/image23.png){width="6.5in" height="2.084722222222222in"}
+![Graphical user interface, text, application, email Description automatically generated](media/Picture23.png){width="6.5in" height="2.084722222222222in"}
 
 What to expect
 
@@ -331,21 +331,21 @@ When your existing or new AWS accounts are enrolled into Netskope CSPM, Netskope
 
 To view your AWS instances and services, sign into the Netskope Management console, navigate to API-enabled Protection-\>Inventory and use the filters on top of the page to find the accounts, instances and more.
 
-![Graphical user interface, application Description automatically generated](media/image24.png){width="6.5404188538932635in" height="3.4205325896762906in"}
+![Graphical user interface, application Description automatically generated](media/Picture24.png){width="6.5404188538932635in" height="3.4205325896762906in"}
 
-Next, you can configure Netskope Security Posture policies that will provide you a clear Image of your cloud security posture and enable you to see how the environment is performing against standards and best practices like CIS (Center for Internet Security) benchmarks.
+Next, you can configure Netskope Security Posture policies that will provide you a clear Picture of your cloud security posture and enable you to see how the environment is performing against standards and best practices like CIS (Center for Internet Security) benchmarks.
 
 To configure Netskope Security Posture policies, on the Netskope Management console navigate to Policies-\>Security Posture and click New Policy.
 
 Here you can choose the AWS Accounts and Security Posture standards and frameworks for which you'd like Netskope to monitor your environment:
 
-![Graphical user interface, text, application, email Description automatically generated](media/image25.png){width="6.768055555555556in" height="3.1305555555555555in"}
+![Graphical user interface, text, application, email Description automatically generated](media/Picture25.png){width="6.768055555555556in" height="3.1305555555555555in"}
 
 To assure your AWS cloud security posture is aligned with your organization's specific security standards you also can write [custom security assessment rules](about:blank) using Domain Specific Language (DSL).
 
 The Netskope Security Posture Assessment results are available for you on the Netskope Management console and via the [View Security Assessment Violations](https://docs.netskope.com/en/view-security-assessment-violations.html) API. To view Security Posture Assessment results on the Netskope Management console, navigate to API-enabled Protection-\>Security Posture and use the filters on top of the page to find the accounts, instances and more. From this page, you can create ad hoc reports by printing the pages or exporting the tables. Or you can go to reports to schedule reports to be sent out on a schedule.
 
-![Graphical user interface, application, website Description automatically generated](media/image26.png){width="6.768055555555556in" height="3.5965277777777778in"}
+![Graphical user interface, application, website Description automatically generated](media/Picture26.png){width="6.768055555555556in" height="3.5965277777777778in"}
 
 You can also take a look at the [CSPM security violation findings Auto-Remediation framework](https://github.com/netskopeoss/CSPM-AWS-AutoRemediation) if you would like to remediate some of the security violations findings automatically.
 
@@ -355,7 +355,7 @@ Netskope Storage Scan services enable you to identify sensitive data and detect 
 
  When your AWS account is enrolled into Netskope Storage Scan, you can configure retroactive and ongoing scans for your S3 buckets. To configure the Netskope Storage Scan policies from the Netskope Management console, navigate to Policies-\>API Data Protection and click on NEW POLICY. You can define the AWS account, AWS S3 buckets and DLP profiles when you are defining the Storage Scan policy from the Netskope Management Console. 
 
-![Graphical user interface, text, application Description automatically generated](media/image27.png){width="6.557292213473316in" height="3.1777646544181977in"}
+![Graphical user interface, text, application Description automatically generated](media/Picture27.png){width="6.557292213473316in" height="3.1777646544181977in"}
 
 You can also use [Netskope Storage Scan Policies](https://docs.netskope.com/en/manage-storage-scan-policies.html) API to define granular policies for scanning your organizations' S3 buckets.
 
