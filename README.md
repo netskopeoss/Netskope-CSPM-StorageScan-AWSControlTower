@@ -1,30 +1,29 @@
-**Implementation Guide:**
+# Implementation Guide:
 
-***Netskope AWS Control Tower Integration***
+# Netskope AWS Control Tower Integration
 
-**Cloud Security Posture Management and Storage Scan services**
+***Cloud Security Posture Management and Storage Scan services***
 
 
-
-# Foreword
+**Foreword**
 
 The Netskope CSPM and Storage Scan services are multi-account security solutions that provides visibility into resources, configurations, data protection, and malware on the AWS cloud. Implementing this solution, you can identify and remediate risky misconfigurations, identify sensitive data (DLP), and detect malware and ransomware.
 
 The purpose of this AWS Implementation Guide is to enable every AWS Marketplace customer to seamlessly activate, deploy and configure the Netskope CSPM and Storage Scan in AWS Control Tower environment while taking full advantage of the resources pre-configured by AWS Control Tower as part of the initialization.
 
-# Solution overview and features
+**Solution overview and features**
 
 [Netskope Cloud Security Posture Management (CSPM)](https://www.netskope.com/products/public-cloud-security) and Storage Scan allows organizations to confidently adopt and secure multi-cloud services. The Netskope solution gives organizations the ability to continuously assess public cloud deployments to mitigate risk, detect threats, scan and protect sensitive data, and monitor for regulatory compliance. Netskope simplifies the discovery and remediation of misconfigurations across your clouds to help prevent data loss and inadvertent exposure.
 
 Netskope helps organizations maintain compliance and best practices, provides the ability to audit security configurations and prevent data exposure, and detect "shadow IaaS" services with real-time controls. With these controls you can stop data exfiltration from external and internal threat actors and protect your sensitive data.
 
--   [**[Netskope CSPM]{.underline}**](https://www.netskope.com/products/public-cloud-security) enables you to gain the visibility and control across the AWS accounts in multi-account environments to secure your data, applications and services, maintain best practices and standards compliance, and to automate your incident response.
+-   [**Netskope CSPM**](https://www.netskope.com/products/public-cloud-security) enables you to gain the visibility and control across the AWS accounts in multi-account environments to secure your data, applications and services, maintain best practices and standards compliance, and to automate your incident response.
 
 -   **Netskope Storage Scan** services allows AWS customers to easily identify and protect sensitive data on the organization's S3 buckets and to detect malware.
 
 With the integration between AWS Control Tower and Netskope CSPM and Storage Scan services you can automatically enroll your existing AWS Control Tower accounts into Netskope CSPM and Storage Scan services, as well assure that new accounts provisioned by the AWS Control Tower account factory will be also immediately protected by the Netskope Security Cloud services.
 
-# Architecture diagram
+**Architecture diagram**
 
 ![](media/image2.png){width="6.767716535433071in" height="4.861111111111111in"}
 
@@ -34,15 +33,15 @@ This solution uses the [Customization for AWS Control Tower](https://aws.amazon.
 
 -   [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) secret encrypted by AWS Key Management Service (KMS) key to store your Netskope API access token.
 
--   [Amazon CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html) triggered by the SUCCEEDED status event from the Customizations for AWS Control Tower [[AWS Step Functions]{.underline}](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/architecture.html).
+-   [Amazon CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html) triggered by the SUCCEEDED status event from the Customizations for AWS Control Tower [AWS Step Functions](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/architecture.html).
 
--   [AWS Lambda](https://aws.amazon.com/lambda/) function NetskopeAutoAddInstanceLambda invoked by the CloudWatch event rule above. Upon receiving a SUCCEEDED event from the CfCT, this Lambda function calls the Netskope [[Get Instance Info]{.underline}](https://docs.netskope.com/en/get-instance-info.html), [[Create an AWS Instance]{.underline}](https://docs.netskope.com/en/create-an-aws-instance.html) and [[Update an AWS Instance]{.underline}](https://docs.netskope.com/en/update-an-aws-instance.html) APIs to create or update the AWS account enrolment in your Netskope tenant.
+-   [AWS Lambda](https://aws.amazon.com/lambda/) function NetskopeAutoAddInstanceLambda invoked by the CloudWatch event rule above. Upon receiving a SUCCEEDED event from the CfCT, this Lambda function calls the Netskope [Get Instance Info](https://docs.netskope.com/en/get-instance-info.html), [Create an AWS Instance](https://docs.netskope.com/en/create-an-aws-instance.html) and [Update an AWS Instance](https://docs.netskope.com/en/update-an-aws-instance.html) APIs to create or update the AWS account enrolment in your Netskope tenant.
 
 The manifest.yaml file for CfCT describes the target AWS accounts and Organization Units (OUs) which you'd like to automatically enroll into Netskope Security Cloud. This manifest.yaml file is configured to launch [AWS CloudFormation Stackset](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html) from the second template, Netskope-CSPM-StorageScan-RoleTemplate-ControlTower.yaml. This template file creates the cross-account IAM role that will be used by Netskope.
 
 When you trigger the CfCT code pipeline, the CfCT solution deploys AWS CloudFormation StackSets with the resources defined in the NetskopeCSPM-StorageScan-RoleTemplate-ControlTower.yaml template across the AWS accounts and OUs defined in the manifest.yaml file.
 
-Later, when you create a new managed account using [[AWS Control Tower Account Factory]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [[AWS Control Tower Lifecycle Event]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
+Later, when you create a new managed account using [AWS Control Tower Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [AWS Control Tower Lifecycle Event](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
 
 ![](media/image2.png){width="6.767716535433071in" height="4.861111111111111in"}
 
@@ -52,39 +51,39 @@ This solution uses the [Customization for AWS Control Tower](https://aws.amazon.
 
 -   [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) secret encrypted by AWS Key Management Service (KMS) key to store your Netskope API access token.
 
--   [Amazon CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html) triggered by the SUCCEEDED status event from the Customizations for AWS Control Tower [[AWS Step Functions]{.underline}](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/architecture.html).
+-   [Amazon CloudWatch event rule](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html) triggered by the SUCCEEDED status event from the Customizations for AWS Control Tower [AWS Step Functions](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/architecture.html).
 
--   [AWS Lambda](https://aws.amazon.com/lambda/) function NetskopeAutoAddInstanceLambda invoked by the CloudWatch event rule above. Upon receiving a SUCCEEDED event from the CfCT, this Lambda function calls the Netskope [[Get Instance Info]{.underline}](https://docs.netskope.com/en/get-instance-info.html), [[Create an AWS Instance]{.underline}](https://docs.netskope.com/en/create-an-aws-instance.html) and [[Update an AWS Instance]{.underline}](https://docs.netskope.com/en/update-an-aws-instance.html) APIs to create or update the AWS account enrolment in your Netskope tenant.
+-   [AWS Lambda](https://aws.amazon.com/lambda/) function NetskopeAutoAddInstanceLambda invoked by the CloudWatch event rule above. Upon receiving a SUCCEEDED event from the CfCT, this Lambda function calls the Netskope [Get Instance Info](https://docs.netskope.com/en/get-instance-info.html), [Create an AWS Instance](https://docs.netskope.com/en/create-an-aws-instance.html) and [Update an AWS Instance](https://docs.netskope.com/en/update-an-aws-instance.html) APIs to create or update the AWS account enrolment in your Netskope tenant.
 
 The manifest.yaml file for CfCT describes the target AWS accounts and Organization Units (OUs) which you'd like to automatically enroll into Netskope Security Cloud. This manifest.yaml file is configured to launch [AWS CloudFormation Stackset](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html) from the second template, Netskope-CSPM-StorageScan-RoleTemplate-ControlTower.yaml. This template file creates the cross-account IAM role that will be used by Netskope.
 
 When you trigger the CfCT code pipeline, the CfCT solution deploys AWS CloudFormation StackSets with the resources defined in the NetskopeCSPM-StorageScan-RoleTemplate-ControlTower.yaml template across the AWS accounts and OUs defined in the manifest.yaml file.
 
-Later, when you create a new managed account using [[AWS Control Tower Account Factory]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [[AWS Control Tower Lifecycle Event]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
+Later, when you create a new managed account using [AWS Control Tower Account Factory](https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html), the CfCT solution uses the [AWS Control Tower Lifecycle Event](https://docs.aws.amazon.com/controltower/latest/userguide/lifecycle-events.html) to invoke the same CodePipeline workflow and deploys the AWS IAM roles will be used by Netskope on the newly created account. When the CfCT solution completed the Netskope AWS IAM role deployment, the CfCT Step Functions send the SUCCEEDED event in the Amazon CloudWatch which triggers the NetskopeAutoAddInstanceLambda Lambda function to configure your AWS account in the Netskope tenant.
 
 Pre-requisites
 
 The following pre-requisites are required to implement the Netskope integration with AWS Control Tower:
 
--   Fully deployed AWS Control Tower. For information about setting up an AWS Control Tower landing zone, see [[Getting Started with AWS Control Tower]{.underline}](https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-with-control-tower.html). You also need administrator privileges in the AWS Control Tower management account.
+-   Fully deployed AWS Control Tower. For information about setting up an AWS Control Tower landing zone, see [Getting Started with AWS Control Tower](https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-with-control-tower.html). You also need administrator privileges in the AWS Control Tower management account.
 
--   [[Customizations for AWS Control Tower]{.underline}](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/) (CfCT) solution deployed in your AWS Control Tower home account. Follow the [implementation guide](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/welcome.html) to deploy CfCT solution.
+-   [Customizations for AWS Control Tower](https://aws.amazon.com/solutions/implementations/customizations-for-aws-control-tower/) (CfCT) solution deployed in your AWS Control Tower home account. Follow the [implementation guide](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/welcome.html) to deploy CfCT solution.
 
 -   An active Netskope Security Cloud tenant. You can subscribe from AWS Marketplace by following the instruction in the next section.
 
 This solution guide assumes working knowledge with AWS management console. We also recommend that you become familiar with the following AWS services:
 
--   [[AWS Lambda]{.underline}](https://aws.amazon.com/lambda/)
+-   [AWS Lambda](https://aws.amazon.com/lambda/)
 
--   [[Amazon CloudWatch]{.underline}](https://aws.amazon.com/cloudwatch/)
+-   [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
 
 -   [AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/GettingStarted.html)
 
 -   [AWS Step Functions](https://aws.amazon.com/step-functions/getting-started/)
 
-If you are new to AWS, see [[Getting Started with AWS]{.underline}](https://aws.amazon.com/getting-started/) . For additional information about AWS Marketplace, see [[AWS Marketplace Overview](https://aws.amazon.com/mp/marketplace-service/overview/).]{.underline}
+If you are new to AWS, see [Getting Started with AWS](https://aws.amazon.com/getting-started/) . For additional information about AWS Marketplace, see [AWS Marketplace Overview](https://aws.amazon.com/mp/marketplace-service/overview/).]{.underline}
 
-# Deployment and Configuration Steps
+**Deployment and Configuration Steps**
 
 Step 1.1: Subscribe to Netskope CSPM & Storage Scan on AWS Marketplace.
 
@@ -118,9 +117,9 @@ Once you have configured your contract, you can click on the Create contract but
 
 To complete registration, choose Setup your account and follow the remaining instructions. If SaaS offering: Customer will be redirected to partner portal. Partner should include any additional steps needed here.
 
-## Configuration: Set up Additional configuration \[SaaS vs AMI\]
+**Configuration: Set up Additional configuration \[SaaS vs AMI\]**
 
-## Netskope Configuration - Rest API Token and External ID
+**Netskope Configuration - Rest API Token and External ID**
 
 **Step 2.1: Log into the Netskope**
 
@@ -158,9 +157,9 @@ Open the CFT file using any text editor and search for the *ExternalId*. Copy th
 
 ![](media/image11.png){width="4.408733595800525in" height="2.5092596237970253in"}
 
-## Configure Account Enrollment Template
+**Configure Account Enrollment Template**
 
-**Step 3.1: Clone [[Netskope CSPM & Storage Scan services]{.underline}](https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git) GitHub repository.**
+**Step 3.1: Clone [Netskope CSPM & Storage Scan services](https://github.com/netskopeoss/Netskope-CSPM-StorageScan-AWSControlTower.git) GitHub repository.**
 
 From your local terminal, run:
 
@@ -244,37 +243,37 @@ Next, you need to deploy AWS IAM cross-account role that will be used by the Net
 
 4.  Open the CoudFormation template file you just downloaded and look for the AWS IAM policy statement similar to this one:
 
-# Statement:
+ Statement:
 
-#  - Action:
+  - Action:
 
-#  - sts:AssumeRole
+  - sts:AssumeRole
 
-#  Condition:
+  Condition:
 
-#  StringEquals:
+  StringEquals:
 
-#  sts:ExternalId:01234567890abcdef01234567890abcdef0123456
+  sts:ExternalId:01234567890abcdef01234567890abcdef0123456
 
-#  Effect: Allow
+  Effect: Allow
 
-#  Principal:
+  Principal:
 
-#  AWS:
+  AWS:
 
-#  - arn:aws:iam::123456789012:root
+  - arn:aws:iam::123456789012:root
 
 > The value of sts:ExternalId is your ExternalID and the account ID in the AWS account ARN is your TrustedAccountID
 
 4.  Set the values for the **SecurityScan**, **DLPScan** and **TrustedAccountID** to true or false to configure the Netskope Security Cloud functionality you'd like to use to protect your AWS accounts.
 
-5.  Configure the AWS Organizations Units and accounts you'd like to enroll in Netskope CSPM and Storage Scan services in the deployment_targets section of the manifest file. Please refer to the [[Customizations for AWS Control Tower Develop Guide]{.underline}](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details about working with the manifest file.
+5.  Configure the AWS Organizations Units and accounts you'd like to enroll in Netskope CSPM and Storage Scan services in the deployment_targets section of the manifest file. Please refer to the [Customizations for AWS Control Tower Develop Guide](https://s3.amazonaws.com/solutions-reference/customizations-for-aws-control-tower/latest/customizations-for-aws-control-tower-developer-guide.pdf) for more details about working with the manifest file.
 
 6.  Save the manifest file.
 
 Now you can trigger the Customizations for AWS Control Tower code pipeline using the newly edited manifest file.
 
-This instruction assume that you are using AWS [[CodeCommit]{.underline}](https://aws.amazon.com/codecommit/) as the Customizations for AWS Control Tower CodePipeline source repository. You can also use Amazon S3 as your configuration source as described in [[this Documentation]{.underline}](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/appendix-a.html). Steps for deploying the Control Tower customizations for Netskope account enrollment using Amazon S3 as a configurations source are similar to the steps using AWS CodeCommit below.
+This instruction assume that you are using AWS [CodeCommit](https://aws.amazon.com/codecommit/) as the Customizations for AWS Control Tower CodePipeline source repository. You can also use Amazon S3 as your configuration source as described in [this Documentation](https://docs.aws.amazon.com/solutions/latest/customizations-for-aws-control-tower/appendix-a.html). Steps for deploying the Control Tower customizations for Netskope account enrollment using Amazon S3 as a configurations source are similar to the steps using AWS CodeCommit below.
 
 7.  Sign into the AWS CodeCommit management console, choose the **custom-control-tower-configuration** repository and copy its **HTTPS (GRC) URL**:
 
@@ -324,11 +323,11 @@ What to expect
 
 Now, at any time when you provision a new AWS account using AWS Control Tower account factory, the solution will automatically enroll that account in the Netskope CSPM and Storage Scan services if this account belongs to the one of the AWS Organization's Units previously provisioned in the manifest file.
 
-## Using the integration 
+**Using the integration**
 
 4.1.1 Netskope CSPM
 
-When your existing or new AWS accounts are enrolled into Netskope CSPM, Netskope performs the complete scan of AWS instances and services running on these account and makes the list of your AWS inventory available for you in one single place on the Netskope Management console and via the [[View Cloud Provider Inventory API]{.underline}](https://docs.netskope.com/en/view-cloud-provider-inventory.html).
+When your existing or new AWS accounts are enrolled into Netskope CSPM, Netskope performs the complete scan of AWS instances and services running on these account and makes the list of your AWS inventory available for you in one single place on the Netskope Management console and via the [View Cloud Provider Inventory API](https://docs.netskope.com/en/view-cloud-provider-inventory.html).
 
 To view your AWS instances and services, sign into the Netskope Management console, navigate to API-enabled Protection-\>Inventory and use the filters on top of the page to find the accounts, instances and more.
 
@@ -342,27 +341,27 @@ Here you can choose the AWS Accounts and Security Posture standards and framewor
 
 ![Graphical user interface, text, application, email Description automatically generated](media/image25.png){width="6.768055555555556in" height="3.1305555555555555in"}
 
-To assure your AWS cloud security posture is aligned with your organization's specific security standards you also can write [[custom security assessment rules]{.underline}](about:blank) using Domain Specific Language (DSL).
+To assure your AWS cloud security posture is aligned with your organization's specific security standards you also can write [custom security assessment rules](about:blank) using Domain Specific Language (DSL).
 
-The Netskope Security Posture Assessment results are available for you on the Netskope Management console and via the [[View Security Assessment Violations]{.underline}](https://docs.netskope.com/en/view-security-assessment-violations.html) API. To view Security Posture Assessment results on the Netskope Management console, navigate to API-enabled Protection-\>Security Posture and use the filters on top of the page to find the accounts, instances and more. From this page, you can create ad hoc reports by printing the pages or exporting the tables. Or you can go to reports to schedule reports to be sent out on a schedule.
+The Netskope Security Posture Assessment results are available for you on the Netskope Management console and via the [View Security Assessment Violations](https://docs.netskope.com/en/view-security-assessment-violations.html) API. To view Security Posture Assessment results on the Netskope Management console, navigate to API-enabled Protection-\>Security Posture and use the filters on top of the page to find the accounts, instances and more. From this page, you can create ad hoc reports by printing the pages or exporting the tables. Or you can go to reports to schedule reports to be sent out on a schedule.
 
 ![Graphical user interface, application, website Description automatically generated](media/image26.png){width="6.768055555555556in" height="3.5965277777777778in"}
 
-You can also take a look at the [[CSPM security violation findings Auto-Remediation framework]{.underline}](https://github.com/netskopeoss/CSPM-AWS-AutoRemediation) if you would like to remediate some of the security violations findings automatically.
+You can also take a look at the [CSPM security violation findings Auto-Remediation framework](https://github.com/netskopeoss/CSPM-AWS-AutoRemediation) if you would like to remediate some of the security violations findings automatically.
 
 4.1.2 Netskope Storage Scan services
 
 Netskope Storage Scan services enable you to identify sensitive data and detect malware on your S3 buckets.
 
-# When your AWS account is enrolled into Netskope Storage Scan, you can configure retroactive and ongoing scans for your S3 buckets. To configure the Netskope Storage Scan policies from the Netskope Management console, navigate to Policies-\>API Data Protection and click on NEW POLICY. You can define the AWS account, AWS S3 buckets and DLP profiles when you are defining the Storage Scan policy from the Netskope Management Console. 
+ When your AWS account is enrolled into Netskope Storage Scan, you can configure retroactive and ongoing scans for your S3 buckets. To configure the Netskope Storage Scan policies from the Netskope Management console, navigate to Policies-\>API Data Protection and click on NEW POLICY. You can define the AWS account, AWS S3 buckets and DLP profiles when you are defining the Storage Scan policy from the Netskope Management Console. 
 
 ![Graphical user interface, text, application Description automatically generated](media/image27.png){width="6.557292213473316in" height="3.1777646544181977in"}
 
-You can also use [[Netskope Storage Scan Policies]{.underline}](https://docs.netskope.com/en/manage-storage-scan-policies.html) API to define granular policies for scanning your organizations' S3 buckets.
+You can also use [Netskope Storage Scan Policies](https://docs.netskope.com/en/manage-storage-scan-policies.html) API to define granular policies for scanning your organizations' S3 buckets.
 
-The results of the DLP and Malware scans can be consumed by the Alerts REST API ([[Netskope Alerts REST API]{.underline}](https://docs.netskope.com/en/get-alerts-data.html)), or via the Netskope Console Alerts or Incident Management pages.
+The results of the DLP and Malware scans can be consumed by the Alerts REST API ([Netskope Alerts REST API](https://docs.netskope.com/en/get-alerts-data.html)), or via the Netskope Console Alerts or Incident Management pages.
 
-For more information about Netskope CSPM and Storage Scan services, please refer to the [[Netskope Knowledge Portal]{.underline}](https://docs.netskope.com/?lang=en) and the [[Netskope Community]{.underline}](https://community.netskope.com/).
+For more information about Netskope CSPM and Storage Scan services, please refer to the [Netskope Knowledge Portal](https://docs.netskope.com/?lang=en) and the [Netskope Community](https://community.netskope.com/).
 
 Best Practices
 
